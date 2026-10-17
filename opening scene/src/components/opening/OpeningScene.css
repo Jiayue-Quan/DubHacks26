@@ -1,12 +1,12 @@
-/* fonts live in public/fonts/ */
+/* fonts live in src/assets/fonts/ */
 @font-face {
   font-family: 'Biro Script';
-  src: url('/fonts/Biro_Script_reduced.otf') format('opentype');
+  src: url('../../assets/fonts/Biro_Script_reduced.otf') format('opentype');
   font-display: block;
 }
 @font-face {
   font-family: 'Apple Garamond';
-  src: url('/fonts/AppleGaramond.ttf') format('truetype');
+  src: url('../../assets/fonts/AppleGaramond.ttf') format('truetype');
   font-display: block;
 }
 

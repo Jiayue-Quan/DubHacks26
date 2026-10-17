@@ -2,6 +2,16 @@ import { useEffect, useRef, useState } from 'react';
 import { startOpeningScene, BOOK, BLOBS } from './sceneEngine';
 import './OpeningScene.css';
 
+/*
+  <OpeningScene onComplete={() => ...} />
+
+  1. Shows the open book in the grass. The book IS the menu (Start / Resources / Credits).
+  2. Pressing Start plays the opening (about 18 seconds), then calls onComplete.
+  A "skip" button appears in the corner once it's playing.
+
+  For testing: speed={2} plays twice as fast; startAt={14} jumps to 14s and plays from there.
+*/
+
 const COLORS = { mauve: '#bf95b1', coral: '#f49a80' };
 
 /* ---------------- fixed decorations (same every time) ---------------- */
@@ -186,7 +196,7 @@ export default function OpeningScene({ onComplete, speed = 1, startAt = 0, title
 
           {/* right page: the menu (fades away once Start is pressed) */}
           <div className="ocs-book__page ocs-book__page--r">
-            <div className={`ocs-menu ${started ? 'is-hidden' : ''}`} inert={started ? '' : undefined}>
+            <div className={`ocs-menu ${started ? 'is-hidden' : ''}`} inert={started}>
               {panel === 'menu' && (
                 <nav className="ocs-menu__panel" aria-label="Main menu">
                   <button className="ocs-menu__btn" onClick={() => { setStarted(true); scene.current?.start(); }}>

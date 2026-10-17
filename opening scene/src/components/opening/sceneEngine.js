@@ -1,3 +1,21 @@
+/* =====================================================================
+   OPENING SCENE ENGINE
+   Runs the whole opening: a "camera" moves around one big world.
+
+     0. the open book in the grass is the MENU; the camera waits here
+        (the title writes itself) until start() is called
+     1. Start pressed: the camera leaves the book
+     2. the camera tilts up past the grass to a pastel sunset sky + sea
+     3. it drifts back down to find the two blobs cuddled in the grass
+     4. it pushes in on their faces: a blink, a nuzzle, a giggle
+
+   The world is 1600 x 2350 "world pixels". Everything (book, blobs,
+   grass) has a fixed spot in it, and the camera just looks at
+   different parts of it. Things further away move slower (parallax).
+
+   React only renders the HTML once (OpeningScene.jsx). This file then
+   moves things around every frame, so React never re-renders mid-animation.
+   ===================================================================== */
 
 /* ---------------- world layout ---------------- */
 export const WORLD = { w: 1600, h: 2350, horizon: 1020, meadowTop: 1034 };
