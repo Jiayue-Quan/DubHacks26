@@ -1,6 +1,17 @@
 @font-face {
   font-family: 'Biro Script';
-  src: url('../fonts/BiroScript.otf') format('opentype');
+  /* tries each name in order, so it works whatever the file in /fonts is called */
+  src: url('../fonts/BiroScript.otf') format('opentype'),
+       url('../fonts/Biro_Script_reduced.otf') format('opentype'),
+       url('../fonts/Biro Script reduced.otf') format('opentype'),
+       url('../fonts/BiroScript.ttf') format('truetype'),
+       local('Biro Script reduced'), local('Biro Script');
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'Apple Garamond';
+  src: url('../fonts/AppleGaramond-Bold.ttf') format('truetype');
   font-display: block;
 }
 
@@ -14,12 +25,13 @@
   --ink-soft: #77755c;
   --gold: #efe0a6;
   /* Biro Script only has letters A-Z a-z, so punctuation falls back to Caveat */
-  --hand: 'Biro Script', 'Caveat', cursive;
+  --hand: 'Biro Script', 'Caveat', cursive;      /* only for the title */
+  --serif: 'Apple Garamond', Garamond, Georgia, serif;   /* everything else */
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; overflow: hidden; background: #3f5a24; }
-body { font-family: 'Cormorant Garamond', Georgia, serif; color: var(--ink); }
+body { font-family: var(--serif); color: var(--ink); }
 
 canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
 #grassDeep  { z-index: 0; filter: blur(2.5px) brightness(.8); transform: scale(1.03); }
@@ -192,14 +204,15 @@ canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
   font-family: var(--hand); font-weight: 700;
   font-size: calc(var(--pw) * .25); line-height: .95; color: var(--ink);
 }
+.back > * { flex-shrink: 0; }            /* stop the underline from getting squished */
 .back .scribble { width: 75%; margin-top: 4px; }
 .back .epigraph {
-  margin-top: 10%;
+  margin-top: 9%;
   font-style: italic; font-size: calc(var(--pw) * .068); line-height: 1.35; color: var(--ink-soft);
 }
 .back .cw {
   margin-top: auto;
-  font-size: calc(var(--pw) * .047); line-height: 1.35; color: var(--ink-soft);
+  font-size: calc(var(--pw) * .048); line-height: 1.4; color: var(--ink-soft);
   border-top: 1px dashed #cdbf93; padding-top: 6%;
 }
 
@@ -217,8 +230,8 @@ canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
 .menu-btn {
   position: relative; align-self: flex-start;
   background: none; border: none; cursor: pointer;
-  font-family: var(--hand); font-weight: 500;
-  font-size: calc(var(--pw) * .16); color: var(--ink);
+  font-family: var(--serif); font-weight: normal;
+  font-size: calc(var(--pw) * .12); color: var(--ink);
   display: flex; align-items: center; gap: .35em;
   padding: 0 .1em;
 }
@@ -239,18 +252,18 @@ canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
 .menu-btn:focus-visible { outline: 2px dashed #b9a86f; outline-offset: 4px; border-radius: 4px; }
 .menu-btn.small { font-size: calc(var(--pw) * .1); color: var(--ink-soft); }
 
-.panel h3 { font-family: var(--hand); font-size: calc(var(--pw) * .13); line-height: 1; }
-.panel p  { font-size: calc(var(--pw) * .062); line-height: 1.4; color: var(--ink-soft); }
+.panel h3 { font-family: var(--serif); font-size: calc(var(--pw) * .1); line-height: 1; }
+.panel p  { font-size: calc(var(--pw) * .06); line-height: 1.4; color: var(--ink-soft); }
 .page-num {
   position: absolute; bottom: 5%; left: 0; right: 0; text-align: center;
-  font-style: italic; font-size: calc(var(--pw) * .05); color: var(--ink-soft);
+  font-size: calc(var(--pw) * .05); color: var(--ink-soft);
 }
 
 /* ---------- "open me" hint ---------- */
 .hint {
   position: fixed; z-index: 5; left: 50%; bottom: 8vh;
   transform: translateX(-50%);
-  font-family: var(--hand); font-size: clamp(30px, 4vw, 42px);
+  font-family: var(--serif); font-size: clamp(22px, 2.6vw, 30px); letter-spacing: .04em;
   color: #fff8dc; text-shadow: 0 0 4px rgba(10,20,0,.95), 0 0 14px rgba(10,20,0,.8), 0 0 28px rgba(10,20,0,.6);
   pointer-events: none;
   opacity: 0; animation: hintIn 1.5s ease 2.2s forwards, breathe 3s ease-in-out 3.7s infinite;
