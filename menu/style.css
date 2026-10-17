@@ -1,0 +1,267 @@
+@font-face {
+  font-family: 'Biro Script';
+  src: url('../fonts/BiroScript.otf') format('opentype');
+  font-display: block;
+}
+
+/* ---------- sizes & colors (change these to restyle everything) ---------- */
+:root {
+  --pw: clamp(150px, 30vw, 300px);      /* width of ONE page */
+  --ph: calc(var(--pw) * 1.4);          /* page height */
+  --paper: #f6efd9;
+  --paper-edge: #e4d9b6;
+  --ink: #3b3a2c;
+  --ink-soft: #77755c;
+  --gold: #efe0a6;
+  /* Biro Script only has letters A-Z a-z, so punctuation falls back to Caveat */
+  --hand: 'Biro Script', 'Caveat', cursive;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; background: #3f5a24; }
+body { font-family: 'Cormorant Garamond', Georgia, serif; color: var(--ink); }
+
+canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+#grassDeep  { z-index: 0; filter: blur(2.5px) brightness(.8); transform: scale(1.03); }
+#grassBack  { z-index: 1; }
+#grassFront { z-index: 3; pointer-events: none; transition: opacity 1.2s ease; }
+#grassNear  { z-index: 3; pointer-events: none; filter: blur(7px); opacity: .9; }
+#grassFront.gone { opacity: 0; }
+
+/* warm sunlight + dark edges, like the reference photo */
+.light {
+  position: fixed; inset: 0; z-index: 4; pointer-events: none;
+  background:
+    radial-gradient(ellipse at 72% 12%, rgba(255, 240, 170, .38), transparent 55%),
+    radial-gradient(ellipse at center, transparent 42%, rgba(18, 32, 8, .6) 100%);
+}
+
+/* ---------- the book ---------- */
+.scene {
+  position: fixed; inset: 0; z-index: 2;
+  display: grid; place-items: center;
+  perspective: 1800px;
+}
+
+.book {
+  grid-area: 1 / 1;
+  position: relative;
+  width: calc(var(--pw) * 2);           /* full open spread */
+  height: var(--ph);
+  transform-style: preserve-3d;
+  /* closed: only the right half exists, so shift left to center it + tilt it */
+  transform: translateX(-25%) rotate(-9deg) translateZ(0) scale(1);
+  transition: transform .55s cubic-bezier(.34, 1.4, .64, 1);
+  cursor: pointer;
+  outline: none;
+}
+
+/* ---------- OPENING ANIMATION, in 3 stages (book.js adds these classes in order) ----------
+   1. pressed: the book squishes down a tiny bit when you click
+   2. lifted:  it rises up out of the grass and turns a little toward you
+   3. open:    it slides to the middle, the cover swings open, a few pages flutter over,
+               light blooms, and the title + menu "write" themselves onto the pages      */
+.book.pressed { transform: translateX(-25%) rotate(-9deg) translateZ(0) scale(.96); transition: transform .13s ease-out; }
+.book.lifted  { transform: translateX(-25%) rotate(-5deg) translateZ(110px) scale(1); }
+.book.open    { transform: translateX(0) rotate(0deg) translateZ(0) scale(1.1);
+                transition: transform 1.5s cubic-bezier(.65, 0, .25, 1); cursor: default; }
+
+/* shadow on the ground: it spreads out and softens as the book lifts */
+.ground-shadow {
+  grid-area: 1 / 1;
+  width: var(--pw); height: var(--ph);
+  border-radius: 10px;
+  background: rgba(8, 18, 2, .6);
+  filter: blur(10px);
+  transform: translate(6px, 10px) rotate(-9deg);
+  transition: transform .55s ease, filter .55s ease, opacity .55s ease;
+  pointer-events: none;
+}
+.scene.lifted .ground-shadow { transform: translate(34px, 52px) rotate(-6deg) scale(1.05); filter: blur(26px); opacity: .55; }
+.scene.open .ground-shadow   { transform: translate(0, 30px) scale(2.25, 1.12); filter: blur(28px); opacity: .45; transition-duration: 1.5s; }
+
+/* loose pages that flutter over after the cover */
+.leaf {
+  position: absolute; top: 1.5%; left: 50%;
+  width: calc(var(--pw) - 4px); height: 97%;
+  transform-origin: left center;
+  transform: translateZ(1px) rotateY(0deg);
+  background: linear-gradient(90deg, rgba(60, 45, 10, .14), transparent 22%, rgba(255,255,255,.25) 60%, transparent), var(--paper);
+  border-radius: 2px 5px 5px 2px;
+  box-shadow: 0 0 2px rgba(0, 0, 0, .18);
+}
+.book.open .leaf { animation: leafFlip 1s cubic-bezier(.45, .05, .35, 1) var(--d) forwards; }
+@keyframes leafFlip {
+  from { transform: translateZ(1px) rotateY(0deg); }
+  to   { transform: translateZ(1px) rotateY(-180deg); }
+}
+
+/* warm flash of light when the book opens */
+.bloom {
+  position: fixed; inset: 0; z-index: 4; pointer-events: none; opacity: 0;
+  background: radial-gradient(ellipse at center, rgba(255, 246, 210, .55), rgba(255, 240, 180, .15) 35%, transparent 65%);
+}
+.bloom.on { animation: bloom 2.6s ease-out forwards; }
+@keyframes bloom { 0% { opacity: 0; } 30% { opacity: 1; } 100% { opacity: .15; } }
+
+/* text that "writes itself" left to right (.ink) or fades in (.fade); --d = delay */
+.ink  { clip-path: inset(-50% 100% -50% -50%); }
+.fade { opacity: 0; }
+.book.open .ink  { animation: write .9s ease-out var(--d, 1.6s) forwards; }
+.book.open .fade { animation: fadeIn .8s ease var(--d, 2s) forwards; }
+@keyframes write  { to { clip-path: inset(-50% -50% -50% -50%); } }
+@keyframes fadeIn { to { opacity: 1; } }
+.book:focus-visible .front { box-shadow: 0 0 0 3px var(--gold), 10px 14px 30px rgba(0,0,0,.45); }
+
+.page {
+  position: absolute; top: 0; left: 50%;
+  width: var(--pw); height: 100%;
+  background:
+    linear-gradient(90deg, rgba(60, 45, 10, .16), transparent 14%),
+    radial-gradient(ellipse at 70% 30%, #fbf6e6, var(--paper) 70%);
+  border-radius: 2px 6px 6px 2px;
+  box-shadow:
+    2px 2px 0 var(--paper-edge), 4px 4px 0 #d8cca5, 6px 6px 0 var(--paper-edge),
+    16px 20px 34px rgba(0, 0, 0, .38);
+}
+
+/* the cover flips open around the spine (its left edge) */
+.cover {
+  position: absolute; top: 0; left: 50%;
+  width: var(--pw); height: 100%;
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  transform: translateZ(2px) rotateY(0deg);
+  transition: transform 1.4s cubic-bezier(.6, .05, .25, 1) .1s;
+}
+.book.open .cover { animation: coverOpen 1.4s cubic-bezier(.5, .05, .3, 1) .1s forwards; }
+@keyframes coverOpen {
+  0%   { transform: translateZ(2px) rotateY(0deg); }
+  72%  { transform: translateZ(2px) rotateY(-183deg); }
+  86%  { transform: translateZ(2px) rotateY(-178.5deg); }
+  100% { transform: translateZ(2px) rotateY(-180deg); }
+}
+
+/* the nudge: cover lifts a little on hover, and "peeks" every few seconds */
+.book:not(.opening):hover .cover { transform: translateZ(2px) rotateY(-16deg); transition-delay: 0s; }
+.book.peek .cover { animation: peek 1.3s ease-in-out; }
+@keyframes peek {
+  0%, 100% { transform: translateZ(2px) rotateY(0deg); }
+  35%      { transform: translateZ(2px) rotateY(-22deg); }
+  55%      { transform: translateZ(2px) rotateY(-12deg); }
+}
+
+.face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+
+/* outside of the cover */
+.front {
+  border-radius: 2px 8px 8px 2px;
+  background:
+    repeating-linear-gradient(0deg,  rgba(255,255,255,.05) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, rgba(0,0,0,.06) 0 1px, transparent 1px 3px),
+    linear-gradient(135deg, #9aab78, #718456);
+  box-shadow: inset 7px 0 10px rgba(0,0,0,.28), 10px 14px 30px rgba(0,0,0,.45);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: calc(var(--pw) * .05);
+  color: var(--gold);
+}
+.front .frame {
+  position: absolute; inset: 9%;
+  border: 1.5px solid rgba(239, 224, 166, .5); border-radius: 4px;
+}
+.front svg { width: 26%; opacity: .9; }
+.front h2 {
+  font-family: var(--hand); font-weight: 700;
+  font-size: calc(var(--pw) * .21); line-height: 1;
+  text-shadow: 0 1px 0 rgba(0,0,0,.25);
+}
+
+/* inside of the cover = left page of the open book */
+.back {
+  transform: rotateY(180deg);
+  border-radius: 6px 2px 2px 6px;
+  background:
+    linear-gradient(270deg, rgba(60, 45, 10, .16), transparent 14%),
+    radial-gradient(ellipse at 30% 30%, #fbf6e6, var(--paper) 70%);
+  box-shadow: -2px 2px 0 var(--paper-edge), -4px 4px 0 #d8cca5, -6px 6px 0 var(--paper-edge),
+              -12px 20px 34px rgba(0,0,0,.3);
+  padding: 14% 12%;
+  display: flex; flex-direction: column;
+}
+.back h1 {
+  font-family: var(--hand); font-weight: 700;
+  font-size: calc(var(--pw) * .25); line-height: .95; color: var(--ink);
+}
+.back .scribble { width: 75%; margin-top: 4px; }
+.back .epigraph {
+  margin-top: 10%;
+  font-style: italic; font-size: calc(var(--pw) * .068); line-height: 1.35; color: var(--ink-soft);
+}
+.back .cw {
+  margin-top: auto;
+  font-size: calc(var(--pw) * .047); line-height: 1.35; color: var(--ink-soft);
+  border-top: 1px dashed #cdbf93; padding-top: 6%;
+}
+
+/* ---------- right page: the menu ---------- */
+.panel {
+  position: absolute; inset: 0;
+  padding: 16% 14%;
+  display: flex; flex-direction: column; justify-content: center; gap: 7%;
+  opacity: 0; pointer-events: none;
+  transition: opacity .5s ease;
+}
+.book.open .panel.active { opacity: 1; pointer-events: auto; transition-delay: 1.5s; }
+.book.open .panel.active.quick { transition-delay: 0s; }
+
+.menu-btn {
+  position: relative; align-self: flex-start;
+  background: none; border: none; cursor: pointer;
+  font-family: var(--hand); font-weight: 500;
+  font-size: calc(var(--pw) * .16); color: var(--ink);
+  display: flex; align-items: center; gap: .35em;
+  padding: 0 .1em;
+}
+.menu-btn .tri {
+  width: .55em; height: .55em;
+  transition: transform .25s ease;
+}
+.menu-btn::after {             /* hand-drawn underline that draws in on hover */
+  content: ""; position: absolute; left: 0; bottom: .05em;
+  width: 100%; height: .18em;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10' preserveAspectRatio='none'%3E%3Cpath d='M2 6 Q 30 2 55 6 T 98 4' stroke='%233b3a2c' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat;
+  background-size: 100% 100%;
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .35s ease;
+}
+.menu-btn:hover::after, .menu-btn:focus-visible::after { transform: scaleX(1); }
+.menu-btn:hover .tri { transform: translateX(3px); }
+.menu-btn:focus-visible { outline: 2px dashed #b9a86f; outline-offset: 4px; border-radius: 4px; }
+.menu-btn.small { font-size: calc(var(--pw) * .1); color: var(--ink-soft); }
+
+.panel h3 { font-family: var(--hand); font-size: calc(var(--pw) * .13); line-height: 1; }
+.panel p  { font-size: calc(var(--pw) * .062); line-height: 1.4; color: var(--ink-soft); }
+.page-num {
+  position: absolute; bottom: 5%; left: 0; right: 0; text-align: center;
+  font-style: italic; font-size: calc(var(--pw) * .05); color: var(--ink-soft);
+}
+
+/* ---------- "open me" hint ---------- */
+.hint {
+  position: fixed; z-index: 5; left: 50%; bottom: 8vh;
+  transform: translateX(-50%);
+  font-family: var(--hand); font-size: clamp(30px, 4vw, 42px);
+  color: #fff8dc; text-shadow: 0 0 4px rgba(10,20,0,.95), 0 0 14px rgba(10,20,0,.8), 0 0 28px rgba(10,20,0,.6);
+  pointer-events: none;
+  opacity: 0; animation: hintIn 1.5s ease 2.2s forwards, breathe 3s ease-in-out 3.7s infinite;
+  transition: opacity .6s ease;
+}
+.hint.gone { opacity: 0 !important; animation: none; }
+@keyframes hintIn  { to { opacity: .9; } }
+@keyframes breathe { 0%, 100% { opacity: .9; } 50% { opacity: .45; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .book, .cover, .panel, .ground-shadow { transition-duration: .01s !important; transition-delay: 0s !important; }
+  .book.open .cover, .book.open .leaf, .book.open .ink, .book.open .fade, .bloom.on { animation-duration: .01s !important; animation-delay: 0s !important; }
+  .book.peek .cover, .hint { animation: none; opacity: .9; }
+}
