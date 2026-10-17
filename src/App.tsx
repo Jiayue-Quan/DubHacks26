@@ -1,8 +1,12 @@
+import { useState } from "react";
+import OpeningScene from "./components/opening/OpeningScene";
 import { SceneView } from "./components/SceneView";
 import { useGame } from "./engine/useGame";
 
 export default function App() {
   const { scene, backgrounds, goTo } = useGame();
+    const [introDone, setIntroDone] = useState(false);
+      if (!introDone) return <OpeningScene onComplete={() => setIntroDone(true)} />;
 
   if (!scene) {
     return (
