@@ -1,0 +1,26 @@
+{
+  "id": "scene_01",
+  "title": "Coming Home",
+  "sceneNumber": 1,
+  "background": ["/images/kitchen.svg"],
+  "dialogue": [
+    {
+      "speaker": "purple",
+      "text": "Hey. You're home late again."
+    },
+    {
+      "speaker": "orange",
+      "text": "The laundry's still sitting there. I thought you said you'd handle it."
+    }
+  ],
+  "choices": [
+    {
+      "text": "I just walked in. Can we talk about this later?",
+      "next": "scene_02"
+    },
+    {
+      "text": "You're right. I'll start it now.",
+      "next": "scene_02"
+    }
+  ]
+}

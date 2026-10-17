@@ -1,0 +1,26 @@
+{
+  "id": "scene_03a",
+  "title": "Tired",
+  "sceneNumber": 3,
+  "background": ["/images/kitchen.svg"],
+  "dialogue": [
+    {
+      "speaker": "purple",
+      "text": "I am tired. That doesn't mean the work at home isn't work."
+    },
+    {
+      "speaker": "orange",
+      "text": "Tired doesn't pay rent."
+    }
+  ],
+  "choices": [
+    {
+      "text": "Start over",
+      "next": "scene_01"
+    }
+  ],
+  "glossary": {
+    "label": "What is financial control?",
+    "body": "Dismissing unpaid labor as 'not real work' is one way money and power get tangled in a relationship. Naming it can make the pattern easier to see."
+  }
+}

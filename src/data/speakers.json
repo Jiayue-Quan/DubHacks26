@@ -1,0 +1,14 @@
+[
+  {
+    "id": "purple",
+    "name": "Violet",
+    "color": "#c9b7f2",
+    "face": "sad"
+  },
+  {
+    "id": "orange",
+    "name": "Mango",
+    "color": "#f4b48a",
+    "face": "annoyed"
+  }
+]

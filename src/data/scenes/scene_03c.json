@@ -1,0 +1,22 @@
+{
+  "id": "scene_03c",
+  "title": "Not Fair",
+  "sceneNumber": 3,
+  "background": ["/images/kitchen.svg"],
+  "dialogue": [
+    {
+      "speaker": "purple",
+      "text": "It's not only about the laundry. It's about who gets to decide whose time matters."
+    },
+    {
+      "speaker": "orange",
+      "text": "…"
+    }
+  ],
+  "choices": [
+    {
+      "text": "Start over",
+      "next": "scene_01"
+    }
+  ]
+}

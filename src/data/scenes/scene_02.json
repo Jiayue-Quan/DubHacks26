@@ -1,0 +1,34 @@
+{
+  "id": "scene_02",
+  "title": "The Weight of It",
+  "sceneNumber": 2,
+  "background": ["/images/kitchen.svg", "/images/kitchen-warm.svg"],
+  "dialogue": [
+    {
+      "speaker": "purple",
+      "text": "I asked you to take care of the laundry."
+    },
+    {
+      "speaker": "orange",
+      "text": "And I work all day. What exactly do you do?"
+    }
+  ],
+  "choices": [
+    {
+      "text": "I'm doing my best. I'm tired.",
+      "next": "scene_03a"
+    },
+    {
+      "text": "I can pick up more shifts.",
+      "next": "scene_03b"
+    },
+    {
+      "text": "That's not fair.",
+      "next": "scene_03c"
+    }
+  ],
+  "glossary": {
+    "label": "What is financial control?",
+    "body": "Financial control is when one person uses money to limit another person's independence — by restricting access to accounts, demanding they earn more while also doing unpaid labor, or making them feel they have to justify every expense. It can look like an ordinary argument about chores or work."
+  }
+}

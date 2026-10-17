@@ -1,0 +1,22 @@
+{
+  "id": "scene_03b",
+  "title": "More Shifts",
+  "sceneNumber": 3,
+  "background": ["/images/kitchen-warm.svg"],
+  "dialogue": [
+    {
+      "speaker": "orange",
+      "text": "Good. Maybe then you'll understand what a real day looks like."
+    },
+    {
+      "speaker": "purple",
+      "text": "More hours won't fix that I already feel like I have to earn the right to rest."
+    }
+  ],
+  "choices": [
+    {
+      "text": "Start over",
+      "next": "scene_01"
+    }
+  ]
+}
