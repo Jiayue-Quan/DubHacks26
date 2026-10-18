@@ -72,13 +72,15 @@ export function SpeechLayer({
       const panel = el?.parentElement;
       if (el && panel) {
         const box = panel.getBoundingClientRect();
-        const placed: { g: HTMLElement; left: number; top: number; w: number; h: number; cx: number; floating: boolean }[] = [];
+        const placed: { g: HTMLElement; left: number; top: number; w: number; h: number; cx: number; floating: boolean; hidden?: boolean }[] = [];
         el.querySelectorAll<HTMLElement>("[data-group]").forEach((g) => {
           const speaker = g.dataset.group!;
           let target: Element | null = null;
+          let inScene = false;                 // the character is in this scene's art (even if off screen right now)
           for (const sel of BLOBS[speaker] ?? []) {
             const t = panel.querySelector(sel);
             if (!t) continue;
+            inScene = true;
             const r = t.getBoundingClientRect();
             const cx = r.left + r.width / 2 - box.left;
             if (cx > 0 && cx < box.width && r.top - box.top < box.height && r.bottom > box.top) { target = t; break; }
@@ -89,13 +91,17 @@ export function SpeechLayer({
             const cx = r.left + r.width / 2 - box.left;
             const head = r.top - box.top + r.height * 0.12;
             placed.push({ g, w, h, cx, left: cx - w / 2, top: Math.max(56, head - h - 14), floating: false });
+          } else if (inScene && !g.querySelector(".speech-choices")) {
+            // the character walked off screen: their bubble goes with them (hidden)
+            const was = pos.get(g);
+            placed.push({ g, w, h, cx: (was?.left ?? 0) + w / 2, left: was?.left ?? 0, top: was?.top ?? 0, floating: false, hidden: true });
           } else {
-            // nobody to point at: bottom middle of the screen
+            // someone who isn't in the picture at all (or the choices): bottom middle of the screen
             placed.push({ g, w, h, cx: box.width / 2, left: (box.width - w) / 2, top: box.height - h - 24, floating: true });
           }
         });
         // two bubbles side by side: push them apart so they don't overlap
-        const side = placed.filter((p) => !p.floating).sort((a, b) => a.cx - b.cx);
+        const side = placed.filter((p) => !p.floating && !p.hidden).sort((a, b) => a.cx - b.cx);
         if (side.length === 2) {
           const [a, b] = side;
           const overlap = a.left + a.w + 12 - b.left;
@@ -103,6 +109,8 @@ export function SpeechLayer({
           if (overlap > 0 && vert) { a.left -= overlap / 2; b.left += overlap / 2; }
         }
         for (const p of placed) {
+          if (p.hidden) { p.g.style.opacity = "0"; p.g.style.pointerEvents = "none"; continue; }
+          p.g.style.pointerEvents = "";
           p.left = Math.max(12, Math.min(box.width - p.w - 12, p.left));
           // hold still unless the character really moved (so the bubbles don't jitter and are easy to click)
           const was = pos.get(p.g);

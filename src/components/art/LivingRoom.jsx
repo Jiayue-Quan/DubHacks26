@@ -112,7 +112,7 @@ function pose(mood, s, hasCaption, at) {
     }
     case 'late': {
       const a = at(6);                      // line 6 "I don't care about the money!" -> angry
-      const bed = at(11) - 1.2;             // line 11 "...I'm going to bed." -> leaves
+      const bed = at(11) - 2.6;             // line 11 "...I'm going to bed." -> leaves
       const leaving = bed > 0;
       return {
         night: true, stand: true, enter: true, enterAt: hasCaption ? CAPTION_TIME : 0, backpack: true, mess: true, fallen: true, cam: 'room',
