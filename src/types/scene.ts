@@ -14,7 +14,7 @@ export type Glossary = {
   label: string;
   body: string;
   autoOpen?: boolean;   // pop up by itself when the scene appears
-  delay?: number;       // seconds to wait before it pops up (default 2.5)
+  delay?: number;       // seconds to wait after the last line before it pops up (default 2)
   steps?: { letter: string; word: string; quote: string }[];   // each part of the tactic + the line that showed it
   note?: string;        // an extra line at the bottom
 };
@@ -29,7 +29,7 @@ export type Scene = {
   timeSkip?: string;  // optional: a card like "a few weeks later" shown when the scene starts
   dialogue: DialogueLine[];
   choices: Choice[];
-  glossary?: Glossary;
+  glossary?: Glossary | Glossary[];   // one popup, or a list that opens one after another
 };
 
 export type Speaker = {

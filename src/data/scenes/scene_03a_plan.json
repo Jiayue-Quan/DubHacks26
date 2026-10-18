@@ -40,16 +40,28 @@
       "next": "scene_04"
     }
   ],
-    "glossary": [
+  "glossary": [
     {
       "label": "What is financial abuse?",
       "body": "Restricting a partner's access to independent money, transportation, or employment makes physical escape from a relationship nearly impossible. By framing isolation as \"taking care of expenses,\" the abuser dismantles the victim's autonomy while keeping them entirely dependent.",
       "autoOpen": true,
-      "delay": 9,
+      "delay": 2,
       "steps": [
-        { "letter": "$", "word": "Takes away income", "quote": "Maybe you should take fewer hours at work, then." },
-        { "letter": "🚲", "word": "Takes away transportation", "quote": "I figured you'd be better off walking or biking." },
-        { "letter": "♡", "word": "Calls it caring", "quote": "I'll cover all our expenses anyway." }
+        {
+          "letter": "$",
+          "word": "Takes away income",
+          "quote": "Maybe you should take fewer hours at work, then."
+        },
+        {
+          "letter": "🚲",
+          "word": "Takes away transportation",
+          "quote": "I figured you'd be better off walking or biking."
+        },
+        {
+          "letter": "♡",
+          "word": "Calls it caring",
+          "quote": "I'll cover all our expenses anyway."
+        }
       ],
       "note": "Without a job or a car, Violet now has to rely on Mango for money and for getting around."
     },
@@ -58,9 +70,21 @@
       "body": "Constant degradation, control, and shaming (body-shaming or otherwise) dismantle a victim's self-esteem and lead them to blame themselves for the mistreatment, causing severe, long-lasting damage to their mental well-being that can be far more dangerous than physical abuse.",
       "autoOpen": true,
       "steps": [
-        { "letter": "⚖", "word": "Body-shaming", "quote": "You'll feel healthier once you're a little less… blob-y!" },
-        { "letter": "☺", "word": "Hides it as a joke", "quote": "Honestly, you could probably use the exercise anyway." },
-        { "letter": "↓", "word": "Dismisses her needs", "quote": "You'll get used to it." }
+        {
+          "letter": "⚖",
+          "word": "Body-shaming",
+          "quote": "You'll feel healthier once you're a little less… blob-y!"
+        },
+        {
+          "letter": "☺",
+          "word": "Hides it as a joke",
+          "quote": "Honestly, you could probably use the exercise anyway."
+        },
+        {
+          "letter": "↓",
+          "word": "Dismisses her needs",
+          "quote": "You'll get used to it."
+        }
       ],
       "note": "Mango laughs it off, so Violet ends up agreeing instead of feeling hurt."
     }

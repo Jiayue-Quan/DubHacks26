@@ -12,7 +12,7 @@ export const ART = {
   living_room: LivingRoom,
 };
 
-export default function SceneArt({ name, mood, caption }) {
+export default function SceneArt({ name, mood, caption, line }) {
   const Art = ART[name];
-  return Art ? <Art mood={mood} caption={caption} /> : null;
+  return Art ? <Art mood={mood} caption={caption} line={line} /> : null;
 }

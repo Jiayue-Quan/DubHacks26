@@ -174,3 +174,10 @@ body {
     grid-template-rows: minmax(360px, 58vh) 1fr;
   }
 }
+
+/* profile pictures never shrink, even next to long lines */
+.speaker-face {
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+}

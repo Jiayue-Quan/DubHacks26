@@ -4,7 +4,7 @@ import { blobPath } from '../opening/sceneEngine';
 import './LivingRoom.css';
 
 /*
-  <LivingRoom mood="mocking" caption="a few weeks later" />
+  <LivingRoom mood="mocking" caption="a few weeks later" line={3} />
 
   Scene art only (no dialogue). Their apartment, evening, rain on the window.
   Everything keeps gently moving: breathing, blinking, rain, the clock, steam from a mug.
@@ -32,6 +32,8 @@ import './LivingRoom.css';
 
   caption: optional time-skip card shown for a moment when the scene starts
            (set it in the JSON with "timeSkip": "a few weeks later").
+  line:    how many dialogue lines are showing so far. The big moments are timed to the lines
+           (e.g. Mango slams the wall when "Cleaning up after me?" appears). Line numbers start at 0.
 */
 
 const MOODS = ['mocking', 'hurt', 'guilt', 'apology', 'cuddle', 'blowup', 'concern', 'shifts', 'car', 'brochures', 'late', 'tense', 'calm'];
@@ -48,15 +50,16 @@ const CAM = {
 };
 const CAPTION_TIME = 2.6;                    // how long the time-skip card stays up
 
-// what each blob does in each mood. s = seconds since the mood started (for one-time beats)
-function pose(mood, s, hasCaption) {
-  const sc = hasCaption ? s - CAPTION_TIME : s;   // story time starts after the time-skip card
+// what each blob does in each mood.
+// s = seconds since the mood started. at(i) = seconds since dialogue line i appeared (negative = not yet)
+function pose(mood, s, hasCaption, at) {
   switch (mood) {
-    case 'mocking': {
-      const laughing = s > 1.2 && s < 3.6;
+    case 'mocking': {                       // line 1: "You? Really?"
+      const l = at(1);
+      const laughing = l > 0.1 && l < 2.5;
       return {
-        violet: s < 3.2 ? ['is-happy'] : s < 3.7 ? [] : ['is-sad'],
-        violetLook: s < 3.7 ? 'at' : 'down', violetBlush: s < 3.2 ? 1 : 0.3,
+        violet: l < 1.8 ? ['is-happy'] : l < 2.6 ? [] : ['is-sad'],
+        violetLook: l < 2.6 ? 'at' : 'down', violetBlush: l < 1.8 ? 1 : 0.3,
         mango: laughing ? ['is-happy', 'is-laugh'] : [], mangoLook: 'at',
         headshake: laughing ? Math.sin(s * 15) * 4 : 0, hop: laughing ? Math.abs(Math.sin(s * 9)) * 5 : 0,
       };
@@ -67,50 +70,56 @@ function pose(mood, s, hasCaption) {
     case 'cuddle':  return { violet: [], violetLook: 'down', violetBlush: 0.6, mango: ['is-happy'], mangoLook: 'at', mangoBlush: 1, cuddle: true };
 
     case 'blowup': {
-      const slam = s > 2.0 && s < 2.7;
-      const angry = s > 2.0 && s < 6.6;
-      const gesture = s > 3.8 && s < 6.2;
+      const b = at(1) - 0.2;                // line 1 "Cleaning up after me?" -> slams the wall
+      const g = at(4) - 0.3;                // line 4 "...scrubbing dishes and picking up trash" -> waves at the mess
+      const sigh = at(6) - 0.2;             // line 6 "I'm just stressed..." -> deflated sigh
+      const slam = b > 0 && b < 0.7;
+      const angry = b > 0 && sigh < 0;
+      const gesture = g > 0 && g < 2.6;
       return {
-        stand: true, enter: true, backpack: true, mess: true, cam: 'room', photoFallAt: 2.35,
-        violet: s < 2.3 ? ['is-tired', 'is-unsure'] : s < 3.4 ? ['is-tired', 'is-surprised'] : s < 6.6 ? ['is-tired', 'is-sad'] : ['is-tired', 'is-unsure'],
+        stand: true, enter: true, backpack: true, mess: true, cam: 'room', photoGone: b > 0.35,
+        violet: b < 0.3 ? ['is-tired', 'is-unsure'] : b < 1.4 ? ['is-tired', 'is-surprised'] : sigh < 0 ? ['is-tired', 'is-sad'] : ['is-tired', 'is-unsure'],
         violetLook: s < 1.8 ? 'down' : 'at',
-        mango: s < 2.0 ? ['is-unsure'] : angry ? ['is-annoyed'] : ['is-sad'],
-        mangoLook: s > 6.6 ? 'down' : 'at',
-        hop: slam ? Math.sin((s - 2.0) / 0.7 * Math.PI) * 55 : angry ? Math.abs(Math.sin(s * 7)) * 3 : 0,
+        mango: b < 0 ? ['is-unsure'] : angry ? ['is-annoyed'] : ['is-sad'],
+        mangoLook: sigh > 0 ? 'down' : 'at',
+        hop: slam ? Math.sin(b / 0.7 * Math.PI) * 55 : angry ? Math.abs(Math.sin(s * 7)) * 3 : 0,
         mangoHand: slam ? 115 : gesture ? 40 + Math.sin(s * 5) * 45 : null,
         headshake: gesture ? Math.sin(s * 9) * 3 : 0,
-        slump: s > 6.6 ? Math.min(1, (s - 6.6) * 2) : 0,
-        shake: Math.max(0, 1 - Math.abs(s - 2.4) / 0.25),
+        slump: sigh > 0 ? Math.min(1, sigh * 2) : 0,
+        shake: Math.max(0, 1 - Math.abs(b - 0.4) / 0.25),
       };
     }
     case 'concern': return { stand: true, backpack: true, mess: true, cam: 'room', fallen: true,
       violet: ['is-tired', 'is-unsure'], violetLook: 'at', mango: ['is-happy'], mangoLook: 'at', mangoBlush: 0.8 };
     case 'shifts':  return { stand: true, backpack: true, mess: true, cam: 'room', fallen: true,
       violet: ['is-tired'], violetLook: 'at',
-      mango: s < 1.6 ? ['is-surprised'] : ['is-unsure'], mangoLook: s < 1.6 ? 'at' : 'away' };
-    case 'car':     return { fallen: true, cam: 'couch',
-      violet: [], violetLook: 'at', violetBlush: 0.7, mango: sc < 2 ? [] : ['is-unsure'], mangoLook: sc < 2 ? 'at' : 'away' };
+      mango: at(1) < 0 ? ['is-surprised'] : ['is-unsure'], mangoLook: at(1) < 0 ? 'at' : 'away' };   // line 1: "Well... if that's what you want"
+    case 'car':     return { fallen: true, cam: 'couch',            // line 1: "A car? But, that's a lot of money."
+      violet: [], violetLook: 'at', violetBlush: 0.7, mango: at(1) < 0 ? [] : ['is-unsure'], mangoLook: at(1) < 0 ? 'at' : 'away' };
     case 'brochures': {
-      const pat = sc > 3.9 && sc < 5.6;
-      const laughing = sc > 5.6 && sc < 7.2;
+      const k = at(4) - 0.2;                // line 4 "...a little less... blob-y!" -> pat on the head, then laughs
+      const pat = k > 0 && k < 1.7;
+      const laughing = k > 1.7 && k < 3.3;
       return {
-        fallen: true, brochures: true, cam: sc < 3.4 ? 'table' : 'couch',
-        violet: sc < 5.6 ? ['is-unsure'] : ['is-sad'], violetLook: 'down',
+        fallen: true, brochures: true, cam: at(1) < 0.6 ? 'table' : 'couch',   // look at the table until Mango explains (line 1)
+        violet: k < 1.7 ? ['is-unsure'] : ['is-sad'], violetLook: 'down',
         mango: laughing ? ['is-happy', 'is-laugh'] : ['is-happy'], mangoLook: 'at', mangoBlush: 0.8,
-        scoot: pat ? -70 : 0, pat, patSquash: pat ? Math.max(0, Math.sin((sc - 3.9) * 9)) * 0.05 : 0,
-        headshake: laughing ? Math.sin(sc * 15) * 4 : 0, hop: laughing ? Math.abs(Math.sin(sc * 9)) * 4 : 0,
+        scoot: pat ? -70 : 0, pat, patSquash: pat ? Math.max(0, Math.sin(k * 9)) * 0.05 : 0,
+        headshake: laughing ? Math.sin(s * 15) * 4 : 0, hop: laughing ? Math.abs(Math.sin(s * 9)) * 4 : 0,
       };
     }
     case 'late': {
-      const leaving = sc > 8;
+      const a = at(6);                      // line 6 "I don't care about the money!" -> angry
+      const bed = at(11) - 1.2;             // line 11 "...I'm going to bed." -> leaves
+      const leaving = bed > 0;
       return {
         night: true, stand: true, enter: true, enterAt: hasCaption ? CAPTION_TIME : 0, backpack: true, mess: true, fallen: true, cam: 'room',
-        violet: leaving ? ['is-tired', 'is-sad'] : sc < 3 ? ['is-tired', 'is-unsure'] : ['is-tired', 'is-sad'],
+        violet: leaving ? ['is-tired', 'is-sad'] : at(2) < 0 ? ['is-tired', 'is-unsure'] : ['is-tired', 'is-sad'],
         violetLook: leaving ? 'down' : 'at',
         mango: ['is-annoyed'], mangoLook: 'at',
-        hop: sc > 4 && sc < 7.5 ? Math.abs(Math.sin(sc * 6)) * 6 : 0,
-        mangoHand: sc > 4.5 && sc < 7 ? 30 + Math.sin(sc * 6) * 30 : null,
-        leave: leaving ? Math.min(1, (sc - 8) / 1.6) : 0,
+        hop: a > 0 && a < 3.5 ? Math.abs(Math.sin(s * 6)) * 6 : 0,
+        mangoHand: a > 0.5 && a < 3 ? 30 + Math.sin(s * 6) * 30 : null,
+        leave: leaving ? Math.min(1, bed / 1.6) : 0,
       };
     }
     case 'calm':    return { violet: ['is-happy'], violetLook: 'at', violetBlush: 1, mango: ['is-happy'], mangoLook: 'at', mangoBlush: 1 };
@@ -120,12 +129,14 @@ function pose(mood, s, hasCaption) {
 
 const LOOK = { at: 'translate(4px, -1px)', down: 'translate(1px, 5px)', away: 'translate(-2px, 3px)', phone: 'translate(3px, 5px)' };
 
-export default function LivingRoom({ mood = 'mocking', caption }) {
+export default function LivingRoom({ mood = 'mocking', caption, line }) {
   const root = useRef(null);
   const moodRef = useRef(mood);
   moodRef.current = MOODS.includes(mood) ? mood : 'mocking';
   const captionRef = useRef(caption);
   captionRef.current = caption;
+  const lineRef = useRef(line);
+  lineRef.current = line;
 
   useEffect(() => {
     const el = root.current;
@@ -141,6 +152,7 @@ export default function LivingRoom({ mood = 'mocking', caption }) {
     const sets = { mess: $('[data-mess]'), brochures: $('[data-brochures]'), night: $('[data-night]'), backpack: $('[data-backpack]') };
     const hands = { h: $('[data-hour]'), m: $('[data-min]'), s: $('[data-sec]') };
     let raf, t = 0, last = performance.now(), moodNow = null, moodStart = 0;
+    let lineAt = [];                        // when each dialogue line appeared (in t)
     // these ease toward each mood's targets
     const cur = { mx: 0, my: 0, lean: 0, vlean: 0, drape: 0, vdx: 0, vdy: 0, camX: CAM.couch.x, camY: CAM.couch.y, camZ: CAM.couch.z, slump: 0 };
     const bump = (x, at, w) => Math.max(0, 1 - Math.abs(x - at) / w);
@@ -152,7 +164,13 @@ export default function LivingRoom({ mood = 'mocking', caption }) {
       const first = moodNow === null;
       if (moodRef.current !== moodNow) { moodNow = moodRef.current; moodStart = t; }
       const s = t - moodStart;
-      const p = pose(moodNow, s, !!captionRef.current);
+      const n = lineRef.current;
+      if (n != null && n < lineAt.length) lineAt = [];                     // a new scene started
+      while (n != null && lineAt.length < n) lineAt.push(t);
+      const sc = captionRef.current ? s - CAPTION_TIME : s;
+      // seconds since line i showed up (if no line info is given, pretend one line every 2.5s)
+      const at = i => n == null ? sc - i * 2.5 : i < lineAt.length ? t - lineAt[i] : -1e9;
+      const p = pose(moodNow, s, !!captionRef.current, at);
 
       /* time-skip card */
       const cap = captionRef.current;
@@ -176,7 +194,7 @@ export default function LivingRoom({ mood = 'mocking', caption }) {
       sets.night.classList.toggle('is-on', !!p.night);
       sets.backpack.classList.toggle('is-on', !!p.backpack);
       el.classList.toggle('is-night', !!p.night);
-      const gone = p.fallen || (p.photoFallAt != null && s > p.photoFallAt);
+      const gone = p.fallen || p.photoGone;
       photo.classList.toggle('is-gone', !!gone);
 
       /* faces */

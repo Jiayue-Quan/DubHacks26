@@ -21,6 +21,26 @@
   ],
   "glossary": {
     "label": "What is DARVO?",
-    "body": "DARVO (Deny, Attack, Reverse Victim & Offender) is a manipulation tactic where an abuser denies their behavior, attacks the person confronting them, and flips the narrative to make themselves look like the actual victim."
+    "body": "DARVO (Deny, Attack, Reverse Victim & Offender) is a manipulation tactic where an abuser denies their behavior, attacks the person confronting them, and flips the narrative to make themselves look like the actual victim.",
+    "autoOpen": true,
+    "delay": 2,
+    "steps": [
+      {
+        "letter": "D",
+        "word": "Deny",
+        "quote": "I was only joking around, I didn't mean anything by it."
+      },
+      {
+        "letter": "A",
+        "word": "Attack",
+        "quote": "Are you saying I don't support you?"
+      },
+      {
+        "letter": "RVO",
+        "word": "Reverse Victim & Offender",
+        "quote": "Now I feel like I'm the bad blobfriend…"
+      }
+    ],
+    "note": "Notice how it ended: Violet was the one who got hurt, but Violet is the one who apologized."
   }
 }
