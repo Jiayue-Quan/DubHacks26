@@ -28,5 +28,29 @@
       "text": "Continue",
       "next": "scene_06"
     }
-  ]
+  ],
+  "glossary": {
+    "label": "Why don't families understand?",
+    "body": "Abusers deliberately sever a victim's support network over time, meaning when a victim finally seeks help, family members (unaware of the hidden abuse and combined with the societal shame of \"failing a relationship\") often minimize the danger or urge them to \"work it out.\"",
+    "autoOpen": true,
+    "delay": 2,
+    "steps": [
+      {
+        "letter": "✂",
+        "word": "Cut off over time",
+        "quote": "Well, well, look who finally remembered us! 🙄"
+      },
+      {
+        "letter": "…",
+        "word": "Shame keeps it hidden",
+        "quote": "nvm. I just missed you guys."
+      },
+      {
+        "letter": "?",
+        "word": "No one asks again",
+        "quote": "k"
+      }
+    ],
+    "note": "Saying it out loud felt too hard, so her family never found out."
+  }
 }

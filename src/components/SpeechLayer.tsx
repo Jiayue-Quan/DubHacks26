@@ -40,7 +40,9 @@ export function SpeechLayer({
   const visible: { line: DialogueLine; old: boolean; i: number }[] = [];
   const cur = lines[shown - 1];
   const prev = lines[shown - 2];
-  const showChoices = done && choices.length > 0;
+  // a single "Continue" isn't something Violet says, so it goes at the bottom of the screen instead
+  const isContinue = choices.length === 1 && choices[0].text.trim().toLowerCase() === "continue";
+  const showChoices = done && choices.length > 0 && !isContinue;
   // (when the choices are up, drop the faded line if it's violet's, so the choices have room)
   if (cur && prev && prev.speaker !== cur.speaker && !(showChoices && prev.speaker === PLAYER))
     visible.push({ line: prev, old: true, i: shown - 2 });
@@ -119,6 +121,11 @@ export function SpeechLayer({
 
   return (
     <div className={`speech-layer${groups.length > 1 ? " has-two" : ""}`} ref={layer}>
+      {done && isContinue && (
+        <button type="button" className="speech-continue" onClick={(e) => { e.stopPropagation(); onChoose(choices[0].next); }}>
+          {choices[0].text} <span aria-hidden>›</span>
+        </button>
+      )}
       {groups.map((g) => {
         const sp = speakerById[g.speaker];
         return (
