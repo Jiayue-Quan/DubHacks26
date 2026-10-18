@@ -1,26 +1,54 @@
 {
   "id": "scene_01",
-  "title": "Coming Home",
+  "title": "Just Being Honest",
   "sceneNumber": 1,
-  "background": ["/images/kitchen.svg"],
+  "background": [
+    "/images/kitchen.svg"
+  ],
+  "art": "living_room",
+  "mood": "mocking",
   "dialogue": [
     {
       "speaker": "purple",
-      "text": "Hey. You're home late again."
+      "text": "I was thinking I might apply for that opportunity I told you about."
     },
     {
       "speaker": "orange",
-      "text": "The laundry's still sitting there. I thought you said you'd handle it."
+      "text": "You? Really?"
+    },
+    {
+      "speaker": "purple",
+      "text": "What?"
+    },
+    {
+      "speaker": "orange",
+      "text": "Nothing. I just don't think you'll end up actually going through with it."
+    },
+    {
+      "speaker": "purple",
+      "text": "Why wouldn't I?"
+    },
+    {
+      "speaker": "orange",
+      "text": "Because you always get excited about things and then give up. You're just so lazy!"
+    },
+    {
+      "speaker": "purple",
+      "text": "Well… that's kind of hurtful."
+    },
+    {
+      "speaker": "orange",
+      "text": "Why? I'm just being honest. Do you want me to lie to you?"
     }
   ],
   "choices": [
     {
-      "text": "I just walked in. Can we talk about this later?",
-      "next": "scene_02"
+      "text": "No, I just want you to support me.",
+      "next": "scene_01a"
     },
     {
-      "text": "You're right. I'll start it now.",
-      "next": "scene_02"
+      "text": "I'm not overreacting. I'm asking you to be nicer and more considerate of what you say.",
+      "next": "scene_01b"
     }
   ]
 }

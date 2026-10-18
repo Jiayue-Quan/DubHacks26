@@ -1,26 +1,30 @@
 {
-  "id": "scene_03a",
-  "title": "Tired",
+  "background": [
+    "/images/kitchen.svg"
+  ],
+  "art": "living_room",
   "sceneNumber": 3,
-  "background": ["/images/kitchen.svg"],
+  "title": "Taking Care of You",
+  "id": "scene_03a",
+  "mood": "concern",
   "dialogue": [
     {
+      "speaker": "orange",
+      "text": "Maybe you should take fewer hours at work, then. That way, you can take care of our home a little more, and I can focus on taking care of the bills."
+    },
+    {
       "speaker": "purple",
-      "text": "I am tired. That doesn't mean the work at home isn't work."
+      "text": "But… I need the money from my shifts."
     },
     {
       "speaker": "orange",
-      "text": "Tired doesn't pay rent."
+      "text": "For what? I'll cover all our expenses anyway. And honestly, I'd feel so much better knowing you're not exhausting yourself all the time."
     }
   ],
   "choices": [
     {
-      "text": "Start over",
-      "next": "scene_01"
+      "text": "Continue",
+      "next": "scene_03a_car"
     }
-  ],
-  "glossary": {
-    "label": "What is financial control?",
-    "body": "Dismissing unpaid labor as 'not real work' is one way money and power get tangled in a relationship. Naming it can make the pattern easier to see."
-  }
+  ]
 }

@@ -1,34 +1,50 @@
 {
-  "id": "scene_02",
-  "title": "The Weight of It",
+  "background": [
+    "/images/kitchen.svg"
+  ],
+  "art": "living_room",
   "sceneNumber": 2,
-  "background": ["/images/kitchen.svg", "/images/kitchen-warm.svg"],
+  "title": "Who Pays",
+  "id": "scene_02",
+  "mood": "blowup",
   "dialogue": [
     {
       "speaker": "purple",
-      "text": "I asked you to take care of the laundry."
+      "text": "The house is a complete mess. Because you work from home, can't you clean up around the house a little bit? I'm so exhausted… I'm tired of cleaning up after you all the time."
     },
     {
       "speaker": "orange",
-      "text": "And I work all day. What exactly do you do?"
+      "text": "Cleaning up after me?"
+    },
+    {
+      "speaker": "orange",
+      "text": "Do you know how hard I've been working? I take care of all the bills while you go and stick your head in a book."
+    },
+    {
+      "speaker": "purple",
+      "text": "Why are you getting so angry? Just because I'm still in college doesn't mean I don't do anything to help. I still work part-time."
+    },
+    {
+      "speaker": "orange",
+      "text": "Sure… like the pennies you earn contribute anything. But it's fine… Instead of focusing on my career, I'll just spend all my time scrubbing dishes and picking up trash."
+    },
+    {
+      "speaker": "purple",
+      "text": "…"
+    },
+    {
+      "speaker": "orange",
+      "text": "I'm just stressed. I wish there was less on my plate. It's hard being the only one who actually earns. Everything is a mess right now, I wish I could help around the house, but I just don't have it in me :("
     }
   ],
   "choices": [
     {
-      "text": "I'm doing my best. I'm tired.",
+      "text": "I'm trying my best too. I'm tired with my schedule. I'm either studying or doing chores or at work, every hour I get.",
       "next": "scene_03a"
     },
     {
-      "text": "I can pick up more shifts.",
+      "text": "Maybe if I pick up some more shifts, it'll take some pressure off you. Then you can use the extra time to help me around the house, so our work is distributed more equally.",
       "next": "scene_03b"
-    },
-    {
-      "text": "That's not fair.",
-      "next": "scene_03c"
     }
-  ],
-  "glossary": {
-    "label": "What is financial control?",
-    "body": "Financial control is when one person uses money to limit another person's independence — by restricting access to accounts, demanding they earn more while also doing unpaid labor, or making them feel they have to justify every expense. It can look like an ordinary argument about chores or work."
-  }
+  ]
 }

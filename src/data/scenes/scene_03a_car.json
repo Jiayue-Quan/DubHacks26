@@ -1,0 +1,35 @@
+{
+  "background": [
+    "/images/kitchen.svg"
+  ],
+  "art": "living_room",
+  "sceneNumber": 3,
+  "title": "Taking Care of You",
+  "id": "scene_03a_car",
+  "mood": "car",
+  "timeSkip": "a few weeks later",
+  "dialogue": [
+    {
+      "speaker": "purple",
+      "text": "Hey, I was wondering if we could look into getting a car. I need to get to campus and work, and the buses don't always run when I need them to."
+    },
+    {
+      "speaker": "orange",
+      "text": "A car? But, that's a lot of money."
+    },
+    {
+      "speaker": "purple",
+      "text": "I know but I thought you'd been saving up for both of us."
+    },
+    {
+      "speaker": "orange",
+      "text": "I'll see what I can do."
+    }
+  ],
+  "choices": [
+    {
+      "text": "Continue",
+      "next": "scene_03a_plan"
+    }
+  ]
+}

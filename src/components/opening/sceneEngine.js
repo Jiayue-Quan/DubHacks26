@@ -22,9 +22,40 @@ export const WORLD = { w: 1600, h: 2350, horizon: 1020, meadowTop: 1034 };
 export const BOOK = { x: 170, y: 1560, w: 640, h: 420, rot: -6 };
 export const BLOBS = {
   //        top-left corner, size, how much it leans (deg)
-  coral: { x: 1080, y: 1676, w: 205, h: 170, lean: 7 },
-  mauve: { x: 1210, y: 1614, w: 265, h: 222, lean: -3 },
+  coral: { x: 1080, y: 1676, w: 205, h: 170, lean: 7,
+    // hands grow out of the body: where they start (x, y), which way they point (deg), length, width
+    hands: [
+      { x: 14, y: 156, angle: 145, len: 22, w: 22, side: 'l' },
+      { x: 222, y: 126, angle: -22, len: 30, w: 22, side: 'r' },   // resting on mauve
+    ] },
+  mauve: { x: 1210, y: 1614, w: 265, h: 222, lean: -3,
+    hands: [
+      { x: 14, y: 156, angle: 142, len: 22, w: 22, side: 'l' },
+      { x: 226, y: 156, angle: 38, len: 22, w: 22, side: 'r' },
+    ] },
 };
+
+/* blob outline (in a 240x200 drawing) + the hands, as ONE shape so they look like one squishy body */
+export const BODY = 'M26 188 C 6 186 2 160 7 130 C 16 70 64 22 122 20 C 184 18 229 66 234 128 C 237 164 229 186 208 189 C 158 194 82 194 26 188 Z';
+export function blobPath(hands, lifts = []) {
+  const f = n => n.toFixed(1);
+  let d = BODY;
+  hands.forEach((h, i) => {
+    const a = ((h.angle + (h.side === 'l' ? 1 : -1) * (lifts[i] || 0)) * Math.PI) / 180;
+    const dx = Math.cos(a), dy = Math.sin(a);
+    let px = -dy, py = dx;
+    const hw = h.w / 2, L = h.len;
+    const tx = h.x + dx * L, ty = h.y + dy * L;                 // fingertip
+    // the base is wider and sits inside the body, so the hand "grows" out of it
+    let a1 = [h.x + px * hw * 1.3, h.y + py * hw * 1.3], a2 = [h.x - px * hw * 1.3, h.y - py * hw * 1.3];
+    const turn = (tx - a1[0]) * (a2[1] - a1[1]) - (ty - a1[1]) * (a2[0] - a1[0]);
+    if (turn < 0) { [a1, a2] = [a2, a1]; px = -px; py = -py; }  // draw it the same direction as the body (or it cuts a hole)
+    d += ` M${f(a1[0])} ${f(a1[1])}`
+      + ` C${f(a1[0] + dx * L * 0.6)} ${f(a1[1] + dy * L * 0.6)} ${f(tx + px * hw)} ${f(ty + py * hw)} ${f(tx)} ${f(ty)}`
+      + ` C${f(tx - px * hw)} ${f(ty - py * hw)} ${f(a2[0] + dx * L * 0.6)} ${f(a2[1] + dy * L * 0.6)} ${f(a2[0])} ${f(a2[1])} Z`;
+  });
+  return d;
+}
 // where the camera points for each shot
 const MENU_SPOT = { x: BOOK.x + BOOK.w / 2 + 6, y: BOOK.y + BOOK.h / 2 - 4 };   // whole open book in view
 const FACES_SPOT = { x: 1250, y: 1730 };
@@ -277,7 +308,8 @@ export function startOpeningScene(root, { speed = 1, startAt = 0, onComplete } =
   const blobs = Object.fromEntries(['coral', 'mauve'].map(name => {
     const el = $(`[data-blob="${name}"]`);
     return [name, { el, body: el.querySelector('[data-body]'), eyes: el.querySelector('[data-eyes]'),
-                    look: el.querySelector('[data-look]'), lean: BLOBS[name].lean }];
+                    look: el.querySelector('[data-look]'), lean: BLOBS[name].lean,
+                    shapes: [...el.querySelectorAll('[data-shape]')], hands: BLOBS[name].hands }];
   }));
 
   const grass = buildGrass(ctx.back, ctx.front, ctx.near);
@@ -375,6 +407,16 @@ export function startOpeningScene(root, { speed = 1, startAt = 0, onComplete } =
       const lean = b.lean + (name === 'coral' ? nuzzle : -nuzzle * 0.3) + Math.sin(life * 0.9 + phase) * 0.6;
       b.body.style.transform =
         `translateY(${-hop * (name === 'coral' ? 1 : 0.7)}px) rotate(${lean}deg) scale(${1 + breathe + squash}, ${1 - breathe - squash})`;
+
+      // hands: tiny idle wiggle, flap while giggling, coral pats mauve during the nuzzle
+      const lifts = b.hands.map((h, i) => {
+        let up = Math.sin(life * 1.4 + phase + i * 2) * 4;
+        if (laughing) up += Math.abs(Math.sin(laughT * Math.PI * 5)) * Math.exp(-laughT * 1.2) * 22;
+        if (name === 'coral' && h.side === 'r') up += Math.max(0, Math.sin((t - 15.9) * Math.PI * 3)) * bump(t, 16.6, 0.8) * 18;
+        return up;
+      });
+      const d = blobPath(b.hands, lifts);
+      b.shapes.forEach(el => el.setAttribute('d', d));
     }
 
     // blinks (eyes squeeze shut for a moment)

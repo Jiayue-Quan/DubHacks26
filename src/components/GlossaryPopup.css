@@ -1,0 +1,68 @@
+/* the educational popup (GlossaryButton.tsx) */
+@font-face {
+  font-family: 'Biro Script';
+  src: url('../assets/fonts/Biro_Script_reduced.otf') format('opentype');
+  font-display: block;
+}
+
+.lesson-backdrop {
+  position: fixed; inset: 0; z-index: 20;
+  display: grid; place-items: center; padding: 20px;
+  background: rgba(58, 44, 66, .42);
+  backdrop-filter: blur(4px);
+  animation: lesson-fade .35s ease both;
+}
+@keyframes lesson-fade { from { opacity: 0; } }
+
+.lesson-card {
+  position: relative; width: min(560px, 100%); max-height: calc(100vh - 40px); overflow: auto;
+  padding: 30px 30px 24px; border-radius: 26px;
+  background:
+    radial-gradient(circle at 100% 0, rgba(244, 154, 128, .16), transparent 40%),
+    radial-gradient(circle at 0 100%, rgba(191, 149, 177, .18), transparent 45%),
+    #fffaf3;
+  box-shadow: 0 24px 60px rgba(60, 35, 60, .3);
+  color: #4a4458;
+  animation: lesson-pop .45s cubic-bezier(.2, .9, .3, 1.2) both;
+}
+@keyframes lesson-pop { from { opacity: 0; transform: translateY(18px) scale(.94); } }
+
+.lesson-tag {
+  display: inline-block; padding: 5px 12px; border-radius: 999px;
+  background: #efe6f0; color: #8b6f86;
+  font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+}
+.lesson-title { margin: 10px 0 6px; font-family: 'Biro Script', 'Caveat', cursive; font-weight: normal; font-size: 40px; line-height: 1.1; color: #3d3340; }
+.lesson-body { margin: 0 0 18px; font-size: 15.5px; line-height: 1.55; }
+.lesson-subhead { margin: 0 0 10px; font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: #a3909f; }
+
+.lesson-steps { list-style: none; margin: 0 0 16px; padding: 0; display: grid; gap: 10px; }
+.lesson-step {
+  display: flex; align-items: center; gap: 14px; padding: 10px 14px; border-radius: 18px; background: #f6efe9;
+  opacity: 0; animation: lesson-step .4s ease both;
+}
+.lesson-step:nth-child(1) { animation-delay: .25s; }
+.lesson-step:nth-child(2) { animation-delay: .45s; }
+.lesson-step:nth-child(3) { animation-delay: .65s; }
+@keyframes lesson-step { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; } }
+
+.lesson-letter {
+  flex: none; min-width: 46px; height: 46px; padding: 0 8px; border-radius: 23px;
+  display: grid; place-items: center;
+  font-family: 'Biro Script', 'Caveat', cursive; font-size: 24px; color: #fff;
+  background: radial-gradient(circle at 38% 30%, #ffd2c4, #f49a80 60%, #d97a62);   /* mango's color: these are mango's moves */
+}
+.lesson-step-text { display: flex; flex-direction: column; gap: 3px; font-size: 14.5px; }
+.lesson-step-text b { font-weight: 800; color: #4a4458; }
+.lesson-step-text q { color: #7a6a78; font-style: italic; }
+
+.lesson-note { margin: 0 0 18px; padding: 12px 14px; border-radius: 14px; background: #f0eaf6; font-size: 14px; line-height: 1.5; color: #6d6480; }
+
+.lesson-close {
+  width: 100%; padding: 13px 18px; border: none; border-radius: 999px; cursor: pointer;
+  font: inherit; font-weight: 800; color: #fff;
+  background: linear-gradient(135deg, #c9a3bd, #bf95b1 50%, #a97f9c);   /* violet's color */
+  box-shadow: 0 6px 16px rgba(150, 100, 140, .3);
+}
+.lesson-close:hover { filter: brightness(1.05); }
+.lesson-close:focus-visible { outline: 3px solid #e8d6e4; outline-offset: 3px; }

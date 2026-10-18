@@ -1,22 +1,38 @@
 {
-  "id": "scene_03b",
-  "title": "More Shifts",
+  "background": [
+    "/images/kitchen.svg"
+  ],
+  "art": "living_room",
   "sceneNumber": 3,
-  "background": ["/images/kitchen-warm.svg"],
+  "title": "Never Around",
+  "id": "scene_03b",
+  "mood": "shifts",
   "dialogue": [
     {
       "speaker": "orange",
-      "text": "Good. Maybe then you'll understand what a real day looks like."
+      "text": "More shifts?"
+    },
+    {
+      "speaker": "orange",
+      "text": "Well… if that's what you want to do."
+    },
+    {
+      "speaker": "orange",
+      "text": "I just hope you know what you're getting yourself into. You're already so busy."
     },
     {
       "speaker": "purple",
-      "text": "More hours won't fix that I already feel like I have to earn the right to rest."
+      "text": "I can manage. It'll be okay."
+    },
+    {
+      "speaker": "orange",
+      "text": "Okay. Whatever you think is best."
     }
   ],
   "choices": [
     {
-      "text": "Start over",
-      "next": "scene_01"
+      "text": "Continue",
+      "next": "scene_03b_late"
     }
   ]
 }

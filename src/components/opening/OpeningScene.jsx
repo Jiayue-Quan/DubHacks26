@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { startOpeningScene, BOOK, BLOBS } from './sceneEngine';
+import { startOpeningScene, BOOK, BLOBS, blobPath } from './sceneEngine';
 import './OpeningScene.css';
 
 /*
@@ -40,7 +40,6 @@ const DAPPLES = Array.from({ length: 18 }, (_, i) => ({
 }));
 
 /* ---------------- a blob ---------------- */
-const BODY = 'M26 188 C 6 186 2 160 7 130 C 16 70 64 22 122 20 C 184 18 229 66 234 128 C 237 164 229 186 208 189 C 158 194 82 194 26 188 Z';
 
 function shade(hex, k) {   // k > 0 lighter, k < 0 darker
   const n = parseInt(hex.slice(1), 16), c = [n >> 16, (n >> 8) & 255, n & 255];
@@ -52,26 +51,27 @@ function Blob({ name, color, face }) {
   const b = BLOBS[name];
   const id = s => `ocs-${name}-${s}`;
   const { eyes, mouth, blush } = face;
+  const BODY = blobPath(b.hands);                 // body + hands as one shape (the engine animates it)
   return (
     <div className="ocs-blob" data-blob={name} style={{ left: b.x, top: b.y, width: b.w, height: b.h }}>
       <div className="ocs-blob__shadow" />
       <div className="ocs-blob__body" data-body>
         <svg viewBox="0 0 240 200" width="100%" height="100%" overflow="visible">
           <defs>
-            <radialGradient id={id('base')} cx="38%" cy="28%" r="80%">
+            <radialGradient id={id('base')} gradientUnits="userSpaceOnUse" cx="91" cy="69" r="175">
               <stop offset="0" stopColor={shade(color, 0.32)} />
               <stop offset="0.45" stopColor={color} />
               <stop offset="1" stopColor={shade(color, -0.32)} />
             </radialGradient>
-            <linearGradient id={id('ao')} x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id={id('ao')} gradientUnits="userSpaceOnUse" x1="0" y1="20" x2="0" y2="194">
               <stop offset="0.6" stopColor="#3a2433" stopOpacity="0" />
               <stop offset="1" stopColor="#3a2433" stopOpacity="0.45" />
             </linearGradient>
-            <linearGradient id={id('rim')} x1="0" y1="0" x2="1" y2="0">
+            <linearGradient id={id('rim')} gradientUnits="userSpaceOnUse" x1="2" y1="0" x2="262" y2="0">
               <stop offset="0.66" stopColor="#ffd2a0" stopOpacity="0" />
               <stop offset="1" stopColor="#ffd2a0" stopOpacity="0.55" />
             </linearGradient>
-            <linearGradient id={id('bounce')} x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id={id('bounce')} gradientUnits="userSpaceOnUse" x1="0" y1="20" x2="0" y2="194">
               <stop offset="0.78" stopColor="#9fc26a" stopOpacity="0" />
               <stop offset="1" stopColor="#9fc26a" stopOpacity="0.22" />
             </linearGradient>
@@ -90,10 +90,10 @@ function Blob({ name, color, face }) {
           </defs>
 
           {/* body: color, soft round shading, shadow underneath, warm sun on the right, grass bounce light */}
-          <path d={BODY} fill={`url(#${id('base')})`} />
-          <path d={BODY} fill={`url(#${id('ao')})`} />
-          <path d={BODY} fill={`url(#${id('rim')})`} />
-          <path d={BODY} fill={`url(#${id('bounce')})`} />
+          <path data-shape d={BODY} fill={`url(#${id('base')})`} />
+          <path data-shape d={BODY} fill={`url(#${id('ao')})`} />
+          <path data-shape d={BODY} fill={`url(#${id('rim')})`} />
+          <path data-shape d={BODY} fill={`url(#${id('bounce')})`} />
           <ellipse cx="80" cy="56" rx="44" ry="26" fill={`url(#${id('shine')})`} transform="rotate(-22 80 56)" />
 
           {/* cheeks */}
@@ -191,7 +191,7 @@ export default function OpeningScene({ onComplete, speed = 1, startAt = 0, title
             <svg className="ocs-book__squiggle" data-squiggle viewBox="0 0 100 14" preserveAspectRatio="none" aria-hidden="true">
               <path d="M3 8 C 14 2, 22 2, 30 8 S 46 14, 56 8 S 74 2, 84 8 S 94 11, 97 7" fill="none" stroke="#3d3340" strokeWidth="2.2" strokeLinecap="round" />
             </svg>
-            <p className="ocs-book__cw">Content Warning Here</p>
+            <p className="ocs-book__cw">Content Warning: This project will touch upon sensitive topics such as emotional manipulation, physical abuse, etc.</p>
           </div>
 
           {/* right page: the menu (fades away once Start is pressed) */}
@@ -211,15 +211,18 @@ export default function OpeningScene({ onComplete, speed = 1, startAt = 0, title
               )}
               {panel === 'resources' && (
                 <section className="ocs-menu__panel">
-                  <h3>Placeholder</h3>
-                  <p>Placeholdertext</p>
+                  <h3>Resources</h3>
+                  <p></p>
                   <button className="ocs-menu__btn ocs-menu__btn--small" onClick={() => setPanel('menu')}>&larr; back</button>
                 </section>
               )}
               {panel === 'credits' && (
                 <section className="ocs-menu__panel">
-                  <h3>Credit Placeholder</h3>
-                  <p>Placeholder.</p>
+                  <h3>Credits</h3>
+                  <p>Jiayue Quan</p>
+                  <p>Diya Jindal</p>
+                  <p>Micah Rodriguez</p>
+                  <p>Andy Nguyen</p>
                   <button className="ocs-menu__btn ocs-menu__btn--small" onClick={() => setPanel('menu')}>&larr; back</button>
                 </section>
               )}

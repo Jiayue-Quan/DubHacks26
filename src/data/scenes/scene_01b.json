@@ -1,0 +1,42 @@
+{
+  "id": "scene_01b",
+  "title": "Just Being Honest",
+  "sceneNumber": 1,
+  "background": [
+    "/images/kitchen.svg"
+  ],
+  "art": "living_room",
+  "mood": "cuddle",
+  "dialogue": [
+    {
+      "speaker": "orange",
+      "text": "I'm overreacting? I didn't even say anything!"
+    },
+    {
+      "speaker": "purple",
+      "text": "I just don't think you should call me lazy."
+    },
+    {
+      "speaker": "orange",
+      "text": "Call you lazy? I made a joke! It's really not fair how you make a big deal out of everything. You make me out to be a terrible blobfriend over nothing."
+    },
+    {
+      "speaker": "purple",
+      "text": "I'm sorry… I didn't mean to make you feel like that. I know you were just teasing."
+    },
+    {
+      "speaker": "orange",
+      "text": "I'm sorry too. I wouldn't have joked about it if I knew how important this was to you."
+    }
+  ],
+  "choices": [
+    {
+      "text": "Continue",
+      "next": "scene_02"
+    }
+  ],
+  "glossary": {
+    "label": "What is DARVO?",
+    "body": "DARVO (Deny, Attack, Reverse Victim & Offender) is a manipulation tactic where an abuser denies their behavior, attacks the person confronting them, and flips the narrative to make themselves look like the actual victim."
+  }
+}

@@ -4,6 +4,7 @@ import { ChoiceList } from "./ChoiceList";
 import { DialogueList } from "./DialogueList";
 import { GlossaryButton } from "./GlossaryButton";
 import { SceneBadge } from "./SceneBadge";
+import SceneArt from "./art/SceneArt";
 
 export function SceneView({
   scene,
@@ -18,7 +19,7 @@ export function SceneView({
     <main className="game-shell">
       <section className="art-panel">
         <SceneBadge scene={scene} />
-        <Background images={backgrounds} />
+        {scene.art ? <SceneArt name={scene.art} mood={scene.mood} caption={scene.timeSkip} /> : <Background images={backgrounds} />}
       </section>
       <section className="play-panel">
         <DialogueList lines={scene.dialogue} />

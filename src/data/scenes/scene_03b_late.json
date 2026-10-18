@@ -1,0 +1,91 @@
+{
+  "background": [
+    "/images/kitchen.svg"
+  ],
+  "art": "living_room",
+  "sceneNumber": 3,
+  "title": "Never Around",
+  "id": "scene_03b_late",
+  "mood": "late",
+  "timeSkip": "a few weeks later",
+  "dialogue": [
+    {
+      "speaker": "orange",
+      "text": "Where have you been?"
+    },
+    {
+      "speaker": "purple",
+      "text": "I'm sorry! My shift ran late, and then I had to finish an assignment."
+    },
+    {
+      "speaker": "orange",
+      "text": "Sure."
+    },
+    {
+      "speaker": "purple",
+      "text": "What?"
+    },
+    {
+      "speaker": "orange",
+      "text": "Nothing. You're just never around anymore."
+    },
+    {
+      "speaker": "purple",
+      "text": "I took on extra shifts, because I thought the extra money would help."
+    },
+    {
+      "speaker": "orange",
+      "text": "I don't care about the money! I care about you actually spending time with me! Isn't spending time with me important to you?"
+    },
+    {
+      "speaker": "purple",
+      "text": "I do spend time with you…"
+    },
+    {
+      "speaker": "orange",
+      "text": "When? When was the last time you spent time with me."
+    },
+    {
+      "speaker": "purple",
+      "text": "That's not fair. You said you were stressed about money, so now I'm trying to help out…"
+    },
+    {
+      "speaker": "orange",
+      "text": "I want you to spend time with me. It's not a relationship if you don't spend time with me. I make time to spend with you. You need to do the same. It's not okay for you to always be out of the house or working on something. You also don't help around the house anymore. Am I just an ATM to you?"
+    },
+    {
+      "speaker": "orange",
+      "text": "You make me so angry sometimes. I'm going to bed."
+    }
+  ],
+  "choices": [
+    {
+      "text": "Continue",
+      "next": "scene_04"
+    }
+  ],
+  "glossary": {
+    "label": "Exhaustion as control",
+    "body": "Overworking a victim creates chronic physiological burnout. Combined with double standards and guilt-trips (\"you're never around\"), the victim is left physically drained, confused, and without the mental energy needed to recognize the manipulation or plan an exit.",
+    "autoOpen": true,
+    "delay": 10,
+    "steps": [
+      {
+        "letter": "⚖",
+        "word": "Double standard",
+        "quote": "You also don't help around the house anymore."
+      },
+      {
+        "letter": "↺",
+        "word": "Guilt-trip",
+        "quote": "Isn't spending time with me important to you?"
+      },
+      {
+        "letter": "$",
+        "word": "Flips the money story",
+        "quote": "Am I just an ATM to you?"
+      }
+    ],
+    "note": "Mango asked for help with money, then got angry when Violet worked more to help."
+  }
+}

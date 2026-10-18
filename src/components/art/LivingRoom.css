@@ -1,0 +1,193 @@
+/* the art fills the art panel; the room inside is drawn in a 1600 x 900 frame */
+.lr { position: absolute; inset: 0; overflow: hidden; background: #2b2233; }
+.lr *, .lr *::before, .lr *::after { box-sizing: border-box; }
+.lr-world { position: absolute; left: 0; top: 0; width: 1600px; height: 900px; transform-origin: 0 0; }
+.lr-world > * { position: absolute; }
+
+/* ---------- wall ---------- */
+.lr-wall {
+  left: 0; top: 0; width: 1600px; height: 700px;
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, .035) 0 2px, transparent 2px 46px),
+    linear-gradient(180deg, #c7aeb9, #d6bfc3 60%, #cdb3b8);
+}
+.lr-wall::after {   /* baseboard */
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 22px; background: linear-gradient(#efe4df, #d9c9c4);
+}
+
+/* window with rain + city at night */
+.lr-window { left: 120px; top: 150px; width: 320px; height: 370px; border-radius: 8px; overflow: hidden; border: 14px solid #efe4df; box-shadow: 0 6px 18px rgba(60, 30, 50, .25); }
+.lr-window > * { position: absolute; inset: 0; }
+.lr-window__sky { background: linear-gradient(#2a2f5c, #4d4a7d 60%, #7a6a92); }
+.lr-window__city {
+  top: auto; height: 42%;
+  background:
+    radial-gradient(circle, #ffe2a8 0 2px, transparent 3px) 6px 10px / 22px 26px,
+    linear-gradient(180deg, transparent 0 18%, #2c2a44 18%);
+  clip-path: polygon(0 40%, 12% 40%, 12% 20%, 26% 20%, 26% 50%, 40% 50%, 40% 10%, 55% 10%, 55% 35%, 70% 35%, 70% 25%, 86% 25%, 86% 45%, 100% 45%, 100% 100%, 0 100%);
+  opacity: .9;
+}
+.lr-window__rain {
+  inset: -30%;
+  background: repeating-linear-gradient(104deg, rgba(220, 230, 255, .32) 0 1.5px, transparent 1.5px 16px);
+  animation: lr-rain .45s linear infinite;
+}
+@keyframes lr-rain { to { background-position: -36px 110px; } }
+.lr-window__bars { background: linear-gradient(90deg, transparent calc(50% - 6px), #efe4df calc(50% - 6px) calc(50% + 6px), transparent calc(50% + 6px)), linear-gradient(transparent calc(50% - 6px), #efe4df calc(50% - 6px) calc(50% + 6px), transparent calc(50% + 6px)); }
+.lr-curtain { top: 120px; width: 96px; height: 480px; border-radius: 0 0 40px 40px; background: repeating-linear-gradient(90deg, #a98fae 0 16px, #b9a0bc 16px 32px); box-shadow: 0 8px 18px rgba(60, 30, 50, .2); }
+.lr-curtain--l { left: 66px; }
+.lr-curtain--r { left: 404px; }
+
+/* the "first date" polaroid above the couch */
+.lr-photo { left: 1112px; top: 292px; width: 112px; height: 134px; padding: 8px 8px 26px; background: #fbf5ec; transform: rotate(7deg); box-shadow: 0 6px 14px rgba(60, 30, 50, .25);
+  transition: transform .9s cubic-bezier(.5, 0, .9, .6), opacity .2s linear .75s; }
+.lr-photo span { display: block; height: 100%; background: radial-gradient(circle at 35% 70%, #f49a80 0 22%, transparent 23%), radial-gradient(circle at 68% 66%, #bf95b1 0 25%, transparent 26%), linear-gradient(#f8dcc0, #eebd9c); }
+.lr-photo.is-gone { transform: translate(30px, 330px) rotate(64deg); opacity: 0; }    /* knocked off: falls behind the couch */
+.lr-photo-mark {   /* paler wallpaper + a nail where the photo used to hang */
+  left: 1118px; top: 296px; width: 104px; height: 126px; transform: rotate(7deg);
+  background: rgba(255, 245, 245, .22); border-radius: 2px;
+}
+.lr-photo-mark::after { content: ""; position: absolute; left: 50%; top: -6px; width: 7px; height: 7px; margin-left: -3px; border-radius: 50%; background: #7a6470; }
+
+/* clock */
+.lr-clock { left: 742px; top: 300px; width: 104px; height: 104px; border-radius: 50%; background: radial-gradient(circle, #fffaf3 60%, #efe4df 61%); border: 7px solid #8d7486; box-shadow: 0 5px 12px rgba(60, 30, 50, .25); }
+.lr-clock__hand { position: absolute; left: 50%; bottom: 50%; transform-origin: 50% 100%; border-radius: 3px; background: #4a3f4f; }
+.lr-clock__hand--h { width: 6px; height: 24px; margin-left: -3px; }
+.lr-clock__hand--m { width: 4px; height: 36px; margin-left: -2px; }
+.lr-clock__hand--s { width: 2px; height: 38px; margin-left: -1px; background: #e0788a; }
+
+/* ---------- floor ---------- */
+.lr-floor {
+  left: 0; top: 690px; width: 1600px; height: 210px;
+  background:
+    repeating-linear-gradient(180deg, rgba(0, 0, 0, .06) 0 2px, transparent 2px 38px),
+    linear-gradient(#b48a72, #9c735d);
+}
+.lr-rug { left: 640px; top: 712px; width: 980px; height: 140px; border-radius: 50%; background: radial-gradient(ellipse, #d9bfcd 0 58%, #c8a6ba 59% 66%, #d9bfcd 67%); box-shadow: 0 6px 12px rgba(60, 30, 40, .2); }
+
+/* floor lamp */
+.lr-lamp { left: 1568px; top: 400px; width: 10px; height: 300px; background: linear-gradient(90deg, #5a4a52, #8a7478, #5a4a52); }
+.lr-lamp::after { content: ""; position: absolute; left: -26px; bottom: -6px; width: 62px; height: 12px; border-radius: 50%; background: #5a4a52; }
+.lr-lamp__shade { position: absolute; left: -48px; top: -86px; width: 106px; height: 92px; clip-path: polygon(20% 0, 80% 0, 100% 100%, 0 100%); background: linear-gradient(#ffe6bf, #f2c287); }
+
+/* couch */
+.lr-couch-back { left: 868px; top: 440px; width: 616px; height: 180px; border-radius: 48px 48px 16px 16px; background: linear-gradient(#97a28c, #828d78); box-shadow: inset 0 10px 0 rgba(255, 255, 255, .08); }
+.lr-couch-seat { left: 856px; top: 588px; width: 640px; height: 86px; border-radius: 22px; background: linear-gradient(#8e997f, #77826c); box-shadow: 0 10px 18px rgba(50, 30, 30, .25); }
+.lr-couch-arm { top: 520px; width: 84px; height: 168px; border-radius: 42px 42px 18px 18px; background: linear-gradient(90deg, #8a9580, #9ba68f, #858f7a); box-shadow: 0 8px 16px rgba(50, 30, 30, .2); }
+.lr-couch-arm--l { left: 830px; }
+.lr-couch-arm--r { left: 1438px; }
+
+/* side table with a mug (steam rising) */
+.lr-table { left: 680px; top: 640px; width: 130px; height: 120px; }
+.lr-table::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 16px; border-radius: 6px; background: linear-gradient(#c8a184, #a9826a); }
+.lr-table::after { content: ""; position: absolute; left: 14px; right: 14px; top: 16px; bottom: 0; background: linear-gradient(90deg, #8a6552 0 10px, transparent 10px calc(100% - 10px), #8a6552 calc(100% - 10px)); }
+.lr-mug { position: absolute; left: 44px; top: -38px; width: 36px; height: 38px; border-radius: 4px 4px 10px 10px; background: linear-gradient(90deg, #f3e7ef, #fff, #e8dbe5); }
+.lr-mug::after { content: ""; position: absolute; right: -12px; top: 8px; width: 14px; height: 16px; border: 5px solid #efe2ea; border-left: none; border-radius: 0 10px 10px 0; }
+.lr-mug i { position: absolute; left: 10px; bottom: 100%; width: 10px; height: 34px; border-radius: 50%; background: rgba(255, 255, 255, .35); filter: blur(4px); animation: lr-steam 3s ease-in-out infinite; }
+.lr-mug i:nth-child(2) { left: 18px; animation-delay: 1s; }
+.lr-mug i:nth-child(3) { left: 4px; animation-delay: 2s; }
+@keyframes lr-steam { 0% { opacity: 0; transform: translateY(6px) scaleX(.6); } 40% { opacity: 1; } 100% { opacity: 0; transform: translateY(-34px) translateX(6px) scaleX(1.3); } }
+
+/* ---------- blobs ---------- */
+.lr-blob__shadow { position: absolute; left: 6%; right: 6%; bottom: -10px; height: 24px; background: radial-gradient(ellipse, rgba(50, 30, 30, .45), transparent 70%); }
+.lr-blob__art { position: absolute; inset: 0; transform: scaleX(var(--flip, 1)); }
+.lr-blob__body { position: absolute; inset: 0; transform-origin: 50% 95%; }
+
+/* mango's phone (in the front hand, which is on the left because mango faces left) */
+.lr-phone {
+  position: absolute; left: -9%; top: 40%; width: 11%; aspect-ratio: 9 / 17;
+  padding: 4px; border-radius: 9px; background: #2b2433;
+  transform: rotate(14deg) translateY(30px); opacity: 0;
+  transition: opacity .5s ease, transform .5s ease;
+}
+.lr-phone.is-out { opacity: 1; transform: rotate(14deg); }
+.lr-phone span {
+  display: block; height: 100%; border-radius: 6px;
+  background: linear-gradient(#e9f0ff, #cfdcff);
+  opacity: var(--flicker, .8);
+  box-shadow: 0 0 26px 8px rgba(190, 210, 255, .35);
+}
+
+/* ---------- light ---------- */
+.lr-light {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse at 88% 40%, rgba(255, 196, 120, .28), transparent 45%),
+    linear-gradient(90deg, rgba(110, 130, 200, .2), transparent 45%);
+  mix-blend-mode: soft-light;
+}
+.lr-vignette { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at 55% 55%, transparent 50%, rgba(40, 20, 40, .45) 100%); }
+
+/* ---------- coffee table ---------- */
+.lr-coffee { left: 1010px; top: 708px; width: 330px; height: 70px; }
+.lr-coffee::before { content: ""; position: absolute; inset: 0 0 auto; height: 18px; border-radius: 8px; background: linear-gradient(#cfa98a, #ad866c); box-shadow: 0 8px 14px rgba(60, 30, 30, .25); }
+.lr-coffee::after { content: ""; position: absolute; left: 20px; right: 20px; top: 18px; bottom: 0; background: linear-gradient(90deg, #8a6552 0 12px, transparent 12px calc(100% - 12px), #8a6552 calc(100% - 12px)); }
+
+/* ---------- the mess ---------- */
+.lr-mess, .lr-brochures { left: 0; top: 0; width: 1600px; height: 900px; pointer-events: none; opacity: 0; transition: opacity .6s ease; }
+.lr-mess.is-on, .lr-brochures.is-on { opacity: 1; }
+.lr-mess > *, .lr-brochures > * { position: absolute; }
+.lr-pizza { left: 1170px; top: 688px; width: 96px; height: 24px; border-radius: 3px; background: linear-gradient(#e9d3b2, #d5b88f); transform: rotate(-4deg); box-shadow: 0 3px 4px rgba(0,0,0,.2); }
+.lr-pizza i { position: absolute; left: 10px; top: -20px; width: 40px; height: 24px; background: linear-gradient(160deg, #f1c46a, #e39a4c); clip-path: polygon(0 100%, 50% 0, 100% 100%); transform: rotate(-12deg); }
+.lr-pizza i::after { content: ""; }
+.lr-can { width: 18px; height: 30px; border-radius: 4px; background: linear-gradient(90deg, #c96a6a, #e88f8f, #b85a5a); }
+.lr-can--1 { left: 1100px; top: 680px; }
+.lr-can--2 { left: 1288px; top: 682px; transform: rotate(8deg); }
+.lr-can--3 { left: 900px; top: 760px; transform: rotate(90deg); }
+.lr-paper { width: 26px; height: 22px; border-radius: 40%; background: radial-gradient(circle at 40% 40%, #fffaf3, #e6dcd6); box-shadow: 0 2px 3px rgba(0,0,0,.15); }
+.lr-paper--1 { left: 1140px; top: 694px; }
+.lr-paper--2 { left: 960px; top: 790px; }
+.lr-paper--3 { left: 1370px; top: 780px; }
+.lr-clothes { left: 790px; top: 690px; width: 120px; height: 52px; border-radius: 40% 50% 10px 10px; background: radial-gradient(circle at 30% 40%, #8fa5c4 0 30%, transparent 31%), radial-gradient(circle at 65% 50%, #e7a9b8 0 32%, transparent 33%), radial-gradient(circle at 50% 75%, #c6b07a 0 35%, transparent 36%); }
+.lr-sock { width: 34px; height: 14px; border-radius: 8px; background: #e8e2d8; }
+.lr-sock--1 { left: 1210px; top: 800px; transform: rotate(-20deg); }
+.lr-sock--2 { left: 1440px; top: 770px; transform: rotate(30deg); background: #b8c8d8; }
+.lr-dishes { left: 1016px; top: 676px; width: 70px; height: 36px; }   /* dirty dishes piled on the coffee table */
+.lr-dishes i { position: absolute; left: 0; width: 70px; height: 10px; border-radius: 50%; background: #f4efea; box-shadow: 0 2px 2px rgba(0,0,0,.15); }
+.lr-dishes i:nth-child(1) { top: 26px; } .lr-dishes i:nth-child(2) { top: 17px; left: 3px; } .lr-dishes i:nth-child(3) { top: 8px; left: -2px; }
+
+/* ---------- mango's "transportation plan" on the coffee table ---------- */
+.lr-brochures b { display: block; font-family: 'Apple Garamond', Georgia, serif; font-weight: normal; line-height: 1.1; }
+.lr-guide { left: 1032px; top: 662px; width: 92px; height: 52px; padding: 6px; border-radius: 3px; transform: rotate(-6deg);
+  background: linear-gradient(135deg, #a9c8a0, #7fae86); color: #fff; box-shadow: 0 4px 6px rgba(0,0,0,.25); }
+.lr-guide b { font-size: 10px; }
+.lr-guide span { position: absolute; right: 6px; bottom: 5px; width: 26px; height: 14px; border: 2px dashed rgba(255,255,255,.8); border-radius: 50% 50% 0 50%; }
+.lr-pamphlet { left: 1132px; top: 668px; width: 80px; height: 44px; padding: 5px; transform: rotate(5deg);
+  background: linear-gradient(90deg, #f6e7a3 0 33%, #f2dc84 33% 66%, #f6e7a3 66%); color: #6b5520; box-shadow: 0 4px 6px rgba(0,0,0,.22); }
+.lr-pamphlet b { font-size: 8.5px; }
+.lr-bikebook { left: 1220px; top: 686px; width: 82px; height: 22px; padding: 4px 6px; border-radius: 2px;
+  background: linear-gradient(#88a8d6, #6c8cc0); color: #fff; box-shadow: 0 3px 5px rgba(0,0,0,.25); }
+.lr-bikebook b { font-size: 9.5px; }
+.lr-helmet { left: 1252px; top: 640px; width: 64px; height: 44px; border-radius: 34px 34px 8px 8px;
+  background: radial-gradient(circle at 35% 30%, #ffffff 0 8%, #ffd0dd 20%, #f39ab6 55%, #d9789a);
+  box-shadow: 0 5px 8px rgba(0,0,0,.25), inset 0 -5px 0 rgba(120, 40, 70, .25); }
+.lr-helmet i { position: absolute; left: 14px; right: 14px; top: 8px; height: 6px; border-radius: 3px; background: repeating-linear-gradient(90deg, rgba(120,40,70,.45) 0 6px, transparent 6px 11px); }
+.lr-brochures.is-on .lr-helmet { animation: lr-shine 2.4s ease-in-out infinite; }
+@keyframes lr-shine { 50% { filter: brightness(1.15) drop-shadow(0 0 6px rgba(255, 240, 250, .9)); } }
+
+/* ---------- violet's backpack (on her back, behind her) ---------- */
+.lr-backpack { position: absolute; left: -12%; top: 30%; width: 34%; height: 52%; border-radius: 30% 30% 22% 22%;
+  background: linear-gradient(135deg, #7f9fb7, #5f7f99); box-shadow: inset -6px -8px 0 rgba(0,0,0,.12);
+  opacity: 0; transition: opacity .4s ease; }
+.lr-backpack::after { content: ""; position: absolute; left: 18%; right: 18%; top: 46%; height: 24%; border-radius: 6px; background: rgba(255,255,255,.14); }
+.lr-backpack.is-on { opacity: 1; }
+
+/* ---------- night ---------- */
+.lr-night { position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 1s ease;
+  background: radial-gradient(ellipse at 95% 45%, rgba(40, 25, 60, .1), rgba(25, 18, 50, .62) 55%);
+  mix-blend-mode: multiply; }
+.lr-night.is-on { opacity: 1; }
+.lr.is-night .lr-lamp__shade { filter: brightness(1.15) drop-shadow(0 0 30px rgba(255, 200, 120, .8)); }
+.lr.is-night .lr-window__city { filter: brightness(.7); }
+
+/* ---------- time-skip card ---------- */
+@font-face {
+  font-family: 'Biro Script';
+  src: url('../../assets/fonts/Biro_Script_reduced.otf') format('opentype');
+  font-display: block;
+}
+.lr-timeskip {
+  position: absolute; inset: 0; z-index: 3; display: grid; place-items: center; pointer-events: none;
+  background: radial-gradient(ellipse, #f6ecdc, #eadbc4); opacity: 0;
+}
+.lr-timeskip span { font-family: 'Biro Script', 'Caveat', cursive; font-size: clamp(28px, 6vh, 54px); color: #4a3f4f; }

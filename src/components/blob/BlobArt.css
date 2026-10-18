@@ -1,0 +1,35 @@
+/* face states for BlobArt (put the class on any element wrapping the blob) */
+.blob-art { display: block; }
+.blob-eyes { transform-box: fill-box; transform-origin: center; }
+.blob-eye-open { transition: transform .25s ease; }
+.blob-pupil { transform-box: fill-box; transform-origin: center; transition: transform .15s ease; }
+[data-blush] { transition: opacity .6s ease; }
+
+.blob-eye-happy, .blob-mouth-laugh, .blob-mouth-o, .blob-mouth-flat, .blob-mouth-frown,
+.blob-brows-annoyed, .blob-brows-sad, .blob-bags { display: none; }
+
+.is-happy .blob-eye-happy { display: inline; }
+.is-happy .blob-eye-open { display: none; }
+
+.is-laugh .blob-mouth-laugh { display: inline; }
+.is-laugh .blob-mouth-smile { display: none; }
+
+.is-surprised .blob-pupil { transform: scale(1.25, 1.18); }
+.is-surprised .blob-mouth-o { display: inline; }
+.is-surprised .blob-mouth-smile { display: none; }
+
+.is-unsure .blob-mouth-flat { display: inline; }
+.is-unsure .blob-mouth-smile { display: none; }
+
+.is-annoyed .blob-brows-annoyed { display: inline; }
+.is-annoyed .blob-pupil { transform: scale(1, .55) translateY(3px); }   /* half-lidded, unimpressed */
+.is-annoyed .blob-mouth-flat { display: inline; }
+.is-annoyed .blob-mouth-smile { display: none; }
+
+.is-sad .blob-brows-sad { display: inline; }
+.is-sad .blob-mouth-frown { display: inline; }
+.is-sad .blob-mouth-smile, .is-sad .blob-mouth-flat { display: none; }
+
+.is-tired .blob-bags { display: inline; }
+.is-tired .blob-pupil { transform: scale(1, .72) translateY(2px); }   /* droopy, heavy lids */
+.is-tired.is-surprised .blob-pupil { transform: scale(1.15, 1.05); }
