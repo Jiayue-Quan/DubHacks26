@@ -1,4 +1,5 @@
 import LivingRoom from './LivingRoom';
+import Beach from './Beach';
 
 /*
   Animated scene art, picked by name from the scene JSON:
@@ -10,6 +11,7 @@ import LivingRoom from './LivingRoom';
 */
 export const ART = {
   living_room: LivingRoom,
+  beach: Beach,
 };
 
 export default function SceneArt({ name, mood, caption, line }) {

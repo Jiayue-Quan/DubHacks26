@@ -27,6 +27,7 @@ export type Scene = {
   art?: string;   // animated scene art (e.g. "living_room"); shown instead of the background image
   mood?: string;  // optional: how the blobs act in that art (e.g. "tense", "hurt", "apology", "calm")
   timeSkip?: string;  // optional: a card like "a few weeks later" shown when the scene starts
+  wait?: number;      // optional: seconds before the first line shows (to let something happen first)
   dialogue: DialogueLine[];
   choices: Choice[];
   glossary?: Glossary | Glossary[];   // one popup, or a list that opens one after another

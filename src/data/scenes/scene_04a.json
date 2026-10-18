@@ -1,0 +1,30 @@
+{
+  "id": "scene_04a",
+  "title": "Happy Birthday",
+  "sceneNumber": 4,
+  "background": [
+    "/images/kitchen.svg"
+  ],
+  "art": "beach",
+  "mood": "push",
+  "dialogue": [
+    {
+      "speaker": "orange",
+      "text": "What did you say to me? Is this how you'll talk to me? After everything I've done for you."
+    },
+    {
+      "speaker": "orange",
+      "text": "After I've loved you despite how worthless you are?"
+    },
+    {
+      "speaker": "purple",
+      "text": "Help– *glug glug*"
+    }
+  ],
+  "choices": [
+    {
+      "text": "Continue",
+      "next": "scene_04_after"
+    }
+  ]
+}

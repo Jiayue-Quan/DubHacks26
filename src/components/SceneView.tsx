@@ -34,7 +34,7 @@ export function SceneView({
   useEffect(() => {
     if (done) return;
     const wait = shown === 0
-      ? (scene.timeSkip ? TIME_SKIP_WAIT : 0.4)
+      ? (scene.timeSkip ? TIME_SKIP_WAIT : scene.wait ?? 0.4)
       : readingTime(scene.dialogue[shown - 1].text);
     const timer = setTimeout(showNext, wait * 1000);
     return () => clearTimeout(timer);

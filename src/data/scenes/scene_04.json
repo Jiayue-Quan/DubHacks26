@@ -1,0 +1,99 @@
+{
+  "id": "scene_04",
+  "title": "Happy Birthday",
+  "sceneNumber": 4,
+  "background": [
+    "/images/kitchen.svg"
+  ],
+  "art": "beach",
+  "mood": "birthday",
+  "timeSkip": "Violet's birthday",
+  "dialogue": [
+    {
+      "speaker": "orange",
+      "text": "Happy Birthday."
+    },
+    {
+      "speaker": "purple",
+      "text": "Thank you for remembering."
+    },
+    {
+      "speaker": "orange",
+      "text": "I could never forget the day you were born. If you didn't exist, who would the love of my life be?"
+    },
+    {
+      "speaker": "purple",
+      "text": "That's a little dramatic."
+    },
+    {
+      "speaker": "orange",
+      "text": "Spending so much of my life being hopelessly in love with you has made me a little dramatic <3"
+    },
+    {
+      "speaker": "purple",
+      "text": "This is so nice. I haven't been here in so long!"
+    },
+    {
+      "speaker": "orange",
+      "text": "We should come here more often."
+    },
+    {
+      "speaker": "purple",
+      "text": "Maybe! I'd love to come with my friends sometime, too. We used to come here all the time."
+    },
+    {
+      "speaker": "orange",
+      "text": "Oh. With your friends?"
+    },
+    {
+      "speaker": "purple",
+      "text": "Yeah! I was thinking, I could ask them if they want to do a picnic here next weekend?"
+    },
+    {
+      "speaker": "orange",
+      "text": "You have time to spend with them, but not with me?"
+    },
+    {
+      "speaker": "purple",
+      "text": "What are you talking about? That's not what I meant–"
+    },
+    {
+      "speaker": "orange",
+      "text": "What do you wanna do with them that you can't do with me?"
+    },
+    {
+      "speaker": "purple",
+      "text": "Nothing! I just miss them."
+    },
+    {
+      "speaker": "orange",
+      "text": "…"
+    },
+    {
+      "speaker": "purple",
+      "text": "We can still do something together. I just haven't seen them in a while. I hate when you get so unreasonable."
+    },
+    {
+      "speaker": "orange",
+      "text": "Unreasonable? I knew planning anything nice for you was a mistake."
+    },
+    {
+      "speaker": "orange",
+      "text": "…"
+    },
+    {
+      "speaker": "orange",
+      "text": "You're a mistake."
+    }
+  ],
+  "choices": [
+    {
+      "text": "If I'm a mistake, then you should leave. Leave me alone. I don't need you ruining my special day.",
+      "next": "scene_04a"
+    },
+    {
+      "text": "I'm sorry… I didn't mean it.",
+      "next": "scene_04b"
+    }
+  ]
+}

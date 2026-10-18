@@ -1,0 +1,84 @@
+{
+  "id": "scene_04_after",
+  "title": "Happy Birthday",
+  "sceneNumber": 4,
+  "background": [
+    "/images/kitchen.svg"
+  ],
+  "art": "beach",
+  "mood": "rescue",
+  "wait": 2.2,
+  "dialogue": [
+    {
+      "speaker": "orange",
+      "text": "Violet? Violet, I didn't mean to… I'm so sorry. Are you okay?"
+    },
+    {
+      "speaker": "purple",
+      "text": "…"
+    },
+    {
+      "speaker": "orange",
+      "text": "It was the waves. I didn't think you'd fall like that."
+    },
+    {
+      "speaker": "orange",
+      "text": "I was joking."
+    },
+    {
+      "speaker": "purple",
+      "text": "You pushed me."
+    },
+    {
+      "speaker": "orange",
+      "text": "I got you out, didn't I?"
+    },
+    {
+      "speaker": "purple",
+      "text": "I thought I was going to die."
+    },
+    {
+      "speaker": "purple",
+      "text": "It's my birthday and I thought I would die –"
+    },
+    {
+      "speaker": "orange",
+      "text": "Don't say that. Please. You know I would never let anything happen to you. I love you so much."
+    }
+  ],
+  "choices": [
+    {
+      "text": "Continue",
+      "next": "scene_05"
+    }
+  ],
+  "glossary": {
+    "label": "What is escalating violence & gaslighting?",
+    "body": "Abusers often test boundaries through sudden physical threats disguised as \"jokes\" or \"accidents,\" immediately using gaslighting (\"it was the waves\") and intense affection to manipulate the victim into doubting their own fear and normalizing life-threatening abuse over time.",
+    "autoOpen": true,
+    "delay": 6,
+    "steps": [
+      {
+        "letter": "⚠",
+        "word": "Calls it an accident",
+        "quote": "It was the waves. I didn't think you'd fall like that."
+      },
+      {
+        "letter": "☺",
+        "word": "Calls it a joke",
+        "quote": "I was joking."
+      },
+      {
+        "letter": "↺",
+        "word": "Turns it into a favor",
+        "quote": "I got you out, didn't I?"
+      },
+      {
+        "letter": "♡",
+        "word": "Covers the fear with love",
+        "quote": "You know I would never let anything happen to you. I love you so much."
+      }
+    ],
+    "note": "Violet knows what happened (\"You pushed me.\"), but Mango's story and sudden sweetness push her to doubt it."
+  }
+}
