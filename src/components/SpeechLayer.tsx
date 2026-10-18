@@ -40,9 +40,11 @@ export function SpeechLayer({
   const visible: { line: DialogueLine; old: boolean; i: number }[] = [];
   const cur = lines[shown - 1];
   const prev = lines[shown - 2];
-  // a single "Continue" isn't something Violet says, so it goes at the bottom of the screen instead
-  const isContinue = choices.length === 1 && choices[0].text.trim().toLowerCase() === "continue";
-  const showChoices = done && choices.length > 0 && !isContinue;
+  // any "Continue" button isn't something Violet says, so it goes at the bottom of the screen instead
+  const isContinueText = (t: string) => t.trim().toLowerCase().replace(/[^a-z]/g, "").startsWith("continue");
+  const continues = choices.filter((c) => isContinueText(c.text));
+  const replies = choices.filter((c) => !isContinueText(c.text));
+  const showChoices = done && replies.length > 0;
   // (when the choices are up, drop the faded line if it's violet's, so the choices have room)
   if (cur && prev && prev.speaker !== cur.speaker && !(showChoices && prev.speaker === PLAYER))
     visible.push({ line: prev, old: true, i: shown - 2 });
@@ -121,11 +123,11 @@ export function SpeechLayer({
 
   return (
     <div className={`speech-layer${groups.length > 1 ? " has-two" : ""}`} ref={layer}>
-      {done && isContinue && (
-        <button type="button" className="speech-continue" onClick={(e) => { e.stopPropagation(); onChoose(choices[0].next); }}>
-          {choices[0].text} <span aria-hidden>›</span>
+      {done && continues.map((c) => (
+        <button key={c.text} type="button" className="speech-continue" onClick={(e) => { e.stopPropagation(); onChoose(c.next); }}>
+          Continue <span aria-hidden>›</span>
         </button>
-      )}
+      ))}
       {groups.map((g) => {
         const sp = speakerById[g.speaker];
         return (
@@ -139,7 +141,7 @@ export function SpeechLayer({
             ))}
             {g.choices && (
               <div className="speech-choices">
-                {choices.map((c) => (
+                {replies.map((c) => (
                   <button key={c.text} type="button" className="speech-choice"
                     onClick={(e) => { e.stopPropagation(); onChoose(c.next); }}>
                     {c.text}
