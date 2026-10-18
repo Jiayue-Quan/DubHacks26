@@ -1,0 +1,59 @@
+{
+  "id": "scene_05a",
+  "title": "Group Chat",
+  "sceneNumber": 5,
+  "background": [
+    "/images/kitchen.svg"
+  ],
+  "art": "group_chat",
+  "mood": "chat",
+  "dialogue": [
+    {
+      "speaker": "sibling",
+      "text": "What happened?",
+      "pause": 1.2
+    },
+    {
+      "speaker": "purple",
+      "text": "We had a fight."
+    },
+    {
+      "speaker": "purple",
+      "text": "They pushed me into the ocean."
+    },
+    {
+      "speaker": "parent",
+      "text": "What do you mean, pushed you?"
+    },
+    {
+      "speaker": "purple",
+      "text": "They got mad and pushed me."
+    },
+    {
+      "speaker": "purple",
+      "text": "They said it was a joke."
+    },
+    {
+      "speaker": "purple",
+      "text": "They pulled me out though…"
+    },
+    {
+      "speaker": "sibling",
+      "text": "WTF ??"
+    },
+    {
+      "speaker": "parent",
+      "text": "I don't understand. You two have always seemed so happy."
+    },
+    {
+      "speaker": "parent",
+      "text": "You're an adult. You chose this relationship. If things are bad, you need to figure out what you want to do about it."
+    }
+  ],
+  "choices": [
+    {
+      "text": "Continue",
+      "next": "scene_06"
+    }
+  ]
+}

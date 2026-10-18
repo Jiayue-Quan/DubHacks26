@@ -10,5 +10,17 @@
     "name": "Mango",
     "color": "#f4b48a",
     "face": "annoyed"
+  },
+  {
+    "id": "parent",
+    "name": "Mom",
+    "color": "#9fb4c9",
+    "face": "neutral"
+  },
+  {
+    "id": "sibling",
+    "name": "Kiwi",
+    "color": "#adc49e",
+    "face": "neutral"
   }
 ]

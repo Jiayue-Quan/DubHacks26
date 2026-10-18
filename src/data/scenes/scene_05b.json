@@ -1,0 +1,32 @@
+{
+  "id": "scene_05b",
+  "title": "Group Chat",
+  "sceneNumber": 5,
+  "background": [
+    "/images/kitchen.svg"
+  ],
+  "art": "group_chat",
+  "mood": "chat",
+  "dialogue": [
+    {
+      "speaker": "purple",
+      "text": "nvm.",
+      "deleted": "They pushed me into the",
+      "pause": 3.6
+    },
+    {
+      "speaker": "purple",
+      "text": "I just missed you guys."
+    },
+    {
+      "speaker": "parent",
+      "text": "k"
+    }
+  ],
+  "choices": [
+    {
+      "text": "Continue",
+      "next": "scene_06"
+    }
+  ]
+}

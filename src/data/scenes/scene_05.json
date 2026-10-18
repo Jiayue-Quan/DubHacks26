@@ -1,0 +1,101 @@
+{
+  "id": "scene_05",
+  "title": "Group Chat",
+  "sceneNumber": 5,
+  "background": [
+    "/images/kitchen.svg"
+  ],
+  "art": "group_chat",
+  "mood": "chat_shaking",
+  "timeSkip": "that night",
+  "dialogue": [
+    {
+      "speaker": "purple",
+      "text": "It's been so long since I've talked to them.",
+      "aloud": true
+    },
+    {
+      "speaker": "parent",
+      "text": "Haven't heard from you in a while. How are you?",
+      "time": "3 months ago",
+      "history": true
+    },
+    {
+      "speaker": "purple",
+      "text": "I'm good! Picked up extra shifts so I've been really busy lately.",
+      "history": true
+    },
+    {
+      "speaker": "sibling",
+      "text": "You alive over there?",
+      "time": "2 months ago",
+      "history": true
+    },
+    {
+      "speaker": "purple",
+      "text": "Alive!",
+      "history": true,
+      "note": "Seen"
+    },
+    {
+      "speaker": "purple",
+      "text": "are you guys awake?",
+      "time": "today",
+      "deleted": "hey… I know it's been a while but",
+      "pause": 4
+    },
+    {
+      "speaker": "parent",
+      "text": "Yes."
+    },
+    {
+      "speaker": "parent",
+      "text": "Why?"
+    },
+    {
+      "speaker": "sibling",
+      "text": "Well, well, look who finally remembered us! 🙄"
+    },
+    {
+      "speaker": "purple",
+      "text": "Haha, yeah. Sorry I've been so distant."
+    },
+    {
+      "speaker": "purple",
+      "text": "I've just been so busy and exhausted with everything…",
+      "pause": 0.6
+    },
+    {
+      "speaker": "parent",
+      "text": "K"
+    },
+    {
+      "speaker": "parent",
+      "text": "No worries"
+    },
+    {
+      "speaker": "parent",
+      "text": "Why did you text?"
+    },
+    {
+      "speaker": "purple",
+      "text": "Can I stay at your place for a little while?",
+      "deleted": "My blobfriend–",
+      "pause": 3.4
+    },
+    {
+      "speaker": "parent",
+      "text": "Why?"
+    }
+  ],
+  "choices": [
+    {
+      "text": "Tell them the truth.",
+      "next": "scene_05a"
+    },
+    {
+      "text": "Pretend it's nothing.",
+      "next": "scene_05b"
+    }
+  ]
+}

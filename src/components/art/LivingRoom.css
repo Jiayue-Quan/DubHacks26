@@ -101,6 +101,18 @@
   transition: opacity .5s ease, transform .5s ease;
 }
 .lr-phone.is-out { opacity: 1; transform: rotate(14deg); }
+/* violet's phone (scene 5), held in her front hand, lighting up her face */
+.lr-vphone {
+  position: absolute; left: 80%; top: 46%; width: 12%; aspect-ratio: 9 / 17; z-index: 2;
+  padding: 4px; border-radius: 9px; background: #2b2433;
+  transform: rotate(-12deg) translateY(30px); opacity: 0;
+  transition: opacity .5s ease, transform .5s ease;
+}
+.lr-vphone.is-out { opacity: 1; transform: rotate(-12deg); }
+.lr-vphone span {
+  display: block; height: 100%; border-radius: 6px; background: linear-gradient(#e9f0ff, #cfdcff);
+  box-shadow: 0 0 34px 14px rgba(190, 210, 255, .4);
+}
 .lr-phone span {
   display: block; height: 100%; border-radius: 6px;
   background: linear-gradient(#e9f0ff, #cfdcff);

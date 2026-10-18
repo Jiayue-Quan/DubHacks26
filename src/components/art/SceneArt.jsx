@@ -1,5 +1,6 @@
 import LivingRoom from './LivingRoom';
 import Beach from './Beach';
+import GroupChat from './GroupChat';
 
 /*
   Animated scene art, picked by name from the scene JSON:
@@ -12,9 +13,10 @@ import Beach from './Beach';
 export const ART = {
   living_room: LivingRoom,
   beach: Beach,
+  group_chat: GroupChat,
 };
 
-export default function SceneArt({ name, mood, caption, line }) {
+export default function SceneArt({ name, mood, caption, line, lines }) {
   const Art = ART[name];
-  return Art ? <Art mood={mood} caption={caption} line={line} /> : null;
+  return Art ? <Art mood={mood} caption={caption} line={line} lines={lines} /> : null;
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Scene } from "../types/scene";
 import { Background } from "./Background";
 import { ChoiceList } from "./ChoiceList";
@@ -30,12 +30,19 @@ export function SceneView({
   const showNext = () =>
     setProgress((p) => ({ id: scene.id, shown: (p.id === scene.id ? p.shown : 0) + 1 }));
 
+  // keep the newest line (and then the choices) in view: only the dialogue panel scrolls
+  const panel = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const el = panel.current;
+    if (el) el.scrollTo({ top: el.scrollHeight, behavior: shown <= 1 ? "auto" : "smooth" });
+  }, [scene.id, shown, done]);
+
   // lines come in one at a time
   useEffect(() => {
     if (done) return;
     const wait = shown === 0
-      ? (scene.timeSkip ? TIME_SKIP_WAIT : scene.wait ?? 0.4)
-      : readingTime(scene.dialogue[shown - 1].text);
+      ? (scene.timeSkip ? TIME_SKIP_WAIT : scene.wait ?? 0.4) + (scene.dialogue[0].pause ?? 0)
+      : readingTime(scene.dialogue[shown - 1].text) + (scene.dialogue[shown].pause ?? 0);
     const timer = setTimeout(showNext, wait * 1000);
     return () => clearTimeout(timer);
   }, [scene.id, shown, done]);
@@ -44,9 +51,9 @@ export function SceneView({
     <main className="game-shell">
       <section className="art-panel">
         <SceneBadge scene={scene} />
-        {scene.art ? <SceneArt name={scene.art} mood={scene.mood} caption={scene.timeSkip} line={shown} /> : <Background images={backgrounds} />}
+        {scene.art ? <SceneArt name={scene.art} mood={scene.mood} caption={scene.timeSkip} line={shown} lines={scene.dialogue} /> : <Background images={backgrounds} />}
       </section>
-      <section className="play-panel">
+      <section className="play-panel" ref={panel}>
         {/* click the dialogue to skip ahead to the next line */}
         <DialogueList lines={scene.dialogue.slice(0, shown)} onClick={done ? undefined : showNext} />
         {done && <ChoiceList choices={scene.choices} onChoose={onChoose} />}

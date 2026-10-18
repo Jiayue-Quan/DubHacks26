@@ -32,6 +32,8 @@ const BOAT = { x: 930, w: 600 };                  // the rowboat (center x)
 const VIOLET = { x: 812, ground: 594, w: 206, h: 172 };
 const MANGO = { x: 1060, ground: 594, w: 218, h: 182 };
 const WATER = { dx: -350, dy: 128 };              // where violet ends up after the push (offset)
+const REACH = { dx: -250, dy: 116 };              // she paddles closer so mango can grab her
+const RESCUE = { reach: 0.9, grab: 1.15, pull: 1.6, back: 0.8 };   // seconds for each part of the rescue
 const CAM = {
   wide:  { x: 800, y: 470, z: 1.0 },
   boat:  { x: 935, y: 520, z: 1.36 },
@@ -67,7 +69,7 @@ function pose(mood, s, hasCaption, at) {
         violet, violetLook: vLook, violetBlush: blush && !drop ? 1.5 : 0.4,
         mango, mangoLook: mLook, mangoBlush: hearts > 0 && !drop ? 1.2 : 0.3,
         hearts: hearts > 0 && hearts < 4 ? hearts : null,
-        mx: sus ? -14 : 0, lean: sus ? -3 : 0,
+        mx: sus ? -14 : 0, lean: sus ? 3 : 0,
         hop: at(12) > 0 && at(12) < 1.4 ? Math.abs(Math.sin(s * 8)) * 4 : 0,
         mangoHand: at(16) > 0.2 && at(16) < 2.6 ? 40 + Math.sin(s * 6) * 30 : null,
         shrink: mistake ? Math.min(0.09, at(18) * 0.06) : 0,
@@ -83,7 +85,7 @@ function pose(mood, s, hasCaption, at) {
         violet: P < 0 ? ['is-sad'] : ['is-surprised'], violetLook: P < 0 ? 'at' : 'down', violetBlush: 0.2,
         mango: after ? ['is-unsure'] : ['is-annoyed'], mangoLook: after ? 'down' : 'at',
         hop: P < 0 && at(0) > 0 ? Math.abs(Math.sin(s * 7)) * 4 : 0,
-        mx: lunge ? -60 * Math.sin(P / 0.5 * Math.PI) : 0, lean: lunge ? -8 : 0,
+        mx: lunge ? -60 * Math.sin(P / 0.5 * Math.PI) : 0, lean: lunge ? 8 : 0,
         mangoHand: lunge ? 105 : P < 0 && at(0) > 0.3 ? 30 + Math.sin(s * 6) * 30 : null,
         push: P > 0 ? P : null,
         balloonFree: P > 0.3,
@@ -92,7 +94,9 @@ function pose(mood, s, hasCaption, at) {
       };
     }
     case 'rescue': {
-      const pull = s < 1.9;                          // mango pulls her back in
+      // mango scoots over, leans over the side, grabs her and hauls her back in
+      const R = RESCUE, k = s;
+      const pull = k < R.grab + R.pull + R.back;
       const hug = at(8);                             // "Don't say that... I love you so much."
       let mango = ['is-sad'], mLook = 'at';
       if (at(2) > 0) { mango = ['is-unsure']; mLook = 'away'; }   // "It was the waves."
@@ -103,11 +107,10 @@ function pose(mood, s, hasCaption, at) {
       if (at(4) > 0 && at(6) < 0) vLook = 'at';                    // "You pushed me."
       return {
         cam: hug > 1 ? 'storm' : 'boat',
-        inWater: s < 0.25, wet: true, shiver: true,
+        rescue: pull ? k : null, wet: true, shiver: !pull,
         violet, violetLook: vLook, violetBlush: 0.15,
-        mango, mangoLook: pull ? 'down' : mLook,
-        mx: pull ? -40 : hug > 0 ? -50 : 0, lean: pull ? -10 : hug > 0 ? 8 : 0,
-        mangoHand: pull ? 110 : null,
+        mango: pull ? ['is-surprised'] : mango, mangoLook: pull ? 'down' : mLook,
+        mx: hug > 0 ? -50 : 0, lean: hug > 0 ? 8 : 0,
         drape: hug > 0,
         shrink: at(6) > 0 ? 0.07 : 0.03,
         balloonFree: true,
@@ -220,7 +223,20 @@ export default function Beach({ mood = 'birthday', caption, line }) {
       violet.el.classList.toggle('is-wet', !!p.wet);
 
       /* violet: in the boat / flying out / in the water */
-      if (P != null && P > 0.25 && P < 0.95) {
+      const R = RESCUE, k = p.rescue;
+      const smooth = x => { x = Math.max(0, Math.min(1, x)); return x * x * (3 - 2 * x); };
+      const u = k == null ? 0 : smooth((k - R.grab) / R.pull);          // 0 = in the water, 1 = back in the boat
+      const land = k != null ? bump(k, R.grab + R.pull + 0.12, 0.2) : 0;  // little squash landing back in her seat
+      if (k != null && k < R.grab) {
+        // treading water, paddling toward the boat
+        const struggle = Math.sin(t * 5.2) * 8;
+        ease('vdx', REACH.dx, dt, 3); ease('vdy', REACH.dy + struggle, dt, 6); ease('vrot', 8 + Math.sin(t * 4) * 6, dt, 5);
+      } else if (k != null && k < R.grab + R.pull) {
+        // hauled up in an arc, over the side
+        cur.vdx = REACH.dx * (1 - u);
+        cur.vdy = REACH.dy * (1 - u) - Math.sin(Math.PI * u) * 95;
+        cur.vrot = 22 * Math.sin(Math.PI * u) + 8 * (1 - u);
+      } else if (P != null && P > 0.25 && P < 0.95) {
         const u = (P - 0.25) / 0.7;
         cur.vdx = WATER.dx * (1 - (1 - u) * (1 - u));
         cur.vdy = -110 * Math.sin(Math.PI * Math.min(1, u * 1.1)) + WATER.dy * u * u;
@@ -242,17 +258,28 @@ export default function Beach({ mood = 'birthday', caption, line }) {
       violet.eyes.style.transform = `scaleY(${1 - 0.9 * bump(loop(t, 3.7), 1.2, 0.09)})`;
       violet.blush.style.opacity = p.violetBlush ?? 0.35;
       const vBreathe = Math.sin(t * 1.9) * 0.012, shrink = p.shrink || 0;
-      violet.body.style.transform = `scale(${1 + vBreathe - shrink * 0.4}, ${1 - vBreathe - shrink})`;
+      violet.body.style.transform = `scale(${1 + vBreathe - shrink * 0.4 + land * 0.08}, ${1 - vBreathe - shrink - land * 0.1})`;
       const fidget = Math.sin(t * 2.3) * 5;
       const flail = (P != null && P >= 0.95) || p.inWater ? Math.sin(t * 9) * 40 : 0;   // waving her nubs in the water
-      violet.shapes.forEach(x => x.setAttribute('d', blobPath(DEFAULT_HANDS, [6 + fidget + flail, 8 - fidget + flail + (flail ? 40 : 0)])));
+      const reachUp = k != null && k < R.grab + R.pull ? 75 + Math.sin(t * 7) * (k < R.grab ? 15 : 0) : 0;   // reaching up for mango's hand
+      violet.shapes.forEach(x => x.setAttribute('d', blobPath(DEFAULT_HANDS, [6 + fidget + flail, 8 - fidget + flail + (flail ? 40 : 0) + reachUp])));
+
 
       /* mango */
-      ease('mx', p.mx || 0, dt, P != null && P < 0.6 ? 12 : 2.4);
-      ease('lean', p.lean || 0, dt, 3);
+      // rescue: scoot to violet's side, lean way over, then lean back hauling her up
+      const reach = k == null ? 0 : k < R.grab + R.pull ? smooth(k / R.reach) : 1 - smooth((k - R.grab - R.pull) / R.back);
+      const haul = k == null ? 0 : u;
+      if (k != null) {
+        cur.mx = -250 * reach * (1 - haul * 0.85);       // steps back toward his seat as he hauls her in
+        cur.lean = (9 - 11 * haul) * reach;
+      } else {
+        ease('mx', p.mx || 0, dt, P != null && P < 0.6 ? 12 : 2.4);
+        ease('lean', p.lean || 0, dt, 3);
+      }
       ease('drape', p.drape ? 1 : 0, dt, 2.2);
       const hugScoot = cur.drape * -36;
-      mango.el.style.translate = `${cur.mx + hugScoot}px ${-(p.hop || 0)}px`;
+      const rise = reach * (1 - haul * 0.7) * 62;                           // pops up over the side to reach her
+      mango.el.style.translate = `${cur.mx + hugScoot}px ${-(p.hop || 0) - rise}px`;
       mango.look.style.transform = LOOK[p.mangoLook];
       mango.eyes.style.transform = `scaleY(${1 - 0.9 * bump(loop(t, 4.3), 2.1, 0.09)})`;
       mango.blush.style.opacity = p.mangoBlush ?? 0.25;
@@ -260,8 +287,8 @@ export default function Beach({ mood = 'birthday', caption, line }) {
       mango.body.style.transform = `rotate(${cur.lean}deg) scale(${1 + mBreathe}, ${1 - mBreathe})`;
       const wave = p.mangoHand != null ? 1 : 0;
       const front = DEFAULT_HANDS.map((h, i) => i === 1
-        ? { ...h, len: h.len + cur.drape * 26 + wave * 26, y: h.y - cur.drape * 34 - wave * 30 } : h);
-      const frontLift = p.mangoHand ?? cur.drape * 40;
+        ? { ...h, len: h.len + cur.drape * 26 + wave * 26 + reach * 80, y: h.y - cur.drape * 34 - wave * 30 } : h);
+      const frontLift = p.mangoHand ?? (reach > 0 ? (4 + haul * 60) * reach : cur.drape * 40);
       mango.shapes.forEach(x => x.setAttribute('d', blobPath(front, [0, frontLift])));
 
       /* hearts over mango's head */

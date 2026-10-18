@@ -32,11 +32,12 @@ import './LivingRoom.css';
 
   caption: optional time-skip card shown for a moment when the scene starts
            (set it in the JSON with "timeSkip": "a few weeks later").
+  shaking: true = violet trembles (used by the group chat scene)
   line:    how many dialogue lines are showing so far. The big moments are timed to the lines
            (e.g. Mango slams the wall when "Cleaning up after me?" appears). Line numbers start at 0.
 */
 
-const MOODS = ['mocking', 'hurt', 'guilt', 'apology', 'cuddle', 'blowup', 'concern', 'shifts', 'car', 'brochures', 'late', 'tense', 'calm'];
+const MOODS = ['mocking', 'hurt', 'guilt', 'apology', 'cuddle', 'blowup', 'concern', 'shifts', 'car', 'brochures', 'late', 'alone', 'shaking', 'tense', 'calm'];
 const FACES = ['is-happy', 'is-laugh', 'is-unsure', 'is-annoyed', 'is-sad', 'is-surprised', 'is-tired'];
 
 const W = 1600, H = 900;                    // the room is drawn in a 1600 x 900 frame
@@ -47,6 +48,7 @@ const CAM = {
   couch: { x: 1170, y: 540, z: 1.32 },
   room:  { x: 1040, y: 590, z: 1.12 },       // when violet is standing, show more of the room
   table: { x: 1172, y: 738, z: 2.7 },        // close-up on the coffee table
+  alone: { x: 1250, y: 560, z: 1.45 },       // violet on the left of the frame, mango's empty spot beside her
 };
 const CAPTION_TIME = 2.6;                    // how long the time-skip card stays up
 
@@ -122,6 +124,12 @@ function pose(mood, s, hasCaption, at) {
         leave: leaving ? Math.min(1, bed / 1.6) : 0,
       };
     }
+    // scene 5: violet alone on the couch at night, on her phone; mango isn't around
+    case 'alone':
+    case 'shaking':
+      return { night: true, fallen: true, cam: 'alone', gone: true, vphone: true,
+        violet: ['is-tired', 'is-sad'], violetLook: 'down', violetBlush: 0.1,
+        mango: [], mangoLook: 'at', shiver: mood === 'shaking' };
     case 'calm':    return { violet: ['is-happy'], violetLook: 'at', violetBlush: 1, mango: ['is-happy'], mangoLook: 'at', mangoBlush: 1 };
     default:        return { violet: ['is-unsure'], violetLook: 'glance', mango: ['is-annoyed'], mangoLook: 'phone', phone: true };
   }
@@ -129,7 +137,7 @@ function pose(mood, s, hasCaption, at) {
 
 const LOOK = { at: 'translate(4px, -1px)', down: 'translate(1px, 5px)', away: 'translate(-2px, 3px)', phone: 'translate(3px, 5px)' };
 
-export default function LivingRoom({ mood = 'mocking', caption, line }) {
+export default function LivingRoom({ mood = 'mocking', caption, line, shaking = false }) {
   const root = useRef(null);
   const moodRef = useRef(mood);
   moodRef.current = MOODS.includes(mood) ? mood : 'mocking';
@@ -137,6 +145,8 @@ export default function LivingRoom({ mood = 'mocking', caption, line }) {
   captionRef.current = caption;
   const lineRef = useRef(line);
   lineRef.current = line;
+  const shakingRef = useRef(shaking);
+  shakingRef.current = shaking;
 
   useEffect(() => {
     const el = root.current;
@@ -148,6 +158,7 @@ export default function LivingRoom({ mood = 'mocking', caption, line }) {
                eyes: b.querySelector('[data-eyes]'), look: b.querySelector('[data-look]'), blush: b.querySelector('[data-blush]') };
     };
     const violet = parts('violet'), mango = parts('mango');
+    const vphone = $('[data-vphone]');
     const phone = $('[data-phone]'), photo = $('[data-photo]'), timeskip = $('[data-timeskip]');
     const sets = { mess: $('[data-mess]'), brochures: $('[data-brochures]'), night: $('[data-night]'), backpack: $('[data-backpack]') };
     const hands = { h: $('[data-hour]'), m: $('[data-min]'), s: $('[data-sec]') };
@@ -210,7 +221,11 @@ export default function LivingRoom({ mood = 'mocking', caption, line }) {
       ease('vdx', p.stand ? STAND.dx : 0, dt, vspeed); ease('vdy', p.stand ? STAND.dy : 0, dt, vspeed);
       const walking = Math.abs((p.stand ? STAND.dx : 0) - cur.vdx) > 8;
       const vHop = walking ? Math.abs(Math.sin(t * 9)) * 12 : 0;
-      violet.el.style.translate = `${cur.vdx}px ${cur.vdy - vHop}px`;
+      const shaky = p.shiver || shakingRef.current;                    // hands shaking (scene 5)
+      const shiver = shaky ? Math.sin(t * 38) * 1.8 : 0;
+      violet.el.style.translate = `${cur.vdx + shiver}px ${cur.vdy - vHop}px`;
+      vphone.classList.toggle('is-out', !!p.vphone);
+      vphone.style.translate = shaky ? `${Math.sin(t * 45) * 3}px ${Math.cos(t * 41) * 2}px` : '0 0';
       const vc = loop(t, 5.5);
       const vLook = p.violetLook === 'glance' ? (vc < 3 ? 'at' : 'down') : p.violetLook;
       violet.look.style.transform = LOOK[vLook];
@@ -228,7 +243,7 @@ export default function LivingRoom({ mood = 'mocking', caption, line }) {
       ease('lean', p.cuddle ? 8 : 0, dt, 2.2);
       ease('drape', p.cuddle ? 1 : 0, dt, 2.2);
       ease('slump', p.slump || 0, dt, 4);
-      const leaveX = (p.leave || 0) * 760;
+      const leaveX = p.gone ? 2000 : (p.leave || 0) * 760;            // gone: not in the room at all
       const leaveHop = p.leave > 0 && p.leave < 1 ? Math.abs(Math.sin(t * 10)) * 14 : 0;
       mango.el.style.translate = `${cur.mx + leaveX}px ${-(p.hop || 0) - leaveHop}px`;
       const mc = loop(t, 6.4);
@@ -311,6 +326,7 @@ export default function LivingRoom({ mood = 'mocking', caption, line }) {
         <div className="lr-couch-seat" />
         <div className="lr-blob" data-blob="violet" style={place(VIOLET, false)}>
           <div className="lr-backpack" data-backpack />
+          <div className="lr-vphone" data-vphone><span /></div>
           <div className="lr-blob__shadow" />
           <div className="lr-blob__art">
             <div className="lr-blob__body" data-body><BlobArt who="violet" idSuffix="lr-violet" /></div>

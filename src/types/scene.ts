@@ -3,6 +3,12 @@ export type SpeakerId = string;
 export type DialogueLine = {
   speaker: SpeakerId;
   text: string;
+  pause?: number;     // optional: extra seconds to wait before this line shows up
+  time?: string;      // optional: a small label like "3 months ago" (for texts)
+  history?: boolean;  // optional (phone scenes): an old text she's scrolling past
+  deleted?: string;   // optional (phone scenes): typed first, then deleted, before the real text is sent
+  note?: string;      // optional (phone scenes): small grey text under the message, like "Seen"
+  aloud?: boolean;    // optional (phone scenes): said out loud, not a text
 };
 
 export type Choice = {
