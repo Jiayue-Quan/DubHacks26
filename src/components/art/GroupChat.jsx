@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import LivingRoom from './LivingRoom';
 import { speakerById } from '../../data/game';
+import { draft, START } from './typing';
 import './GroupChat.css';
 
 /*
   <GroupChat mood="chat" line={3} lines={scene.dialogue} />
 
-  Scene 5: Violet alone on the couch at night (the living room art behind), and her phone up close,
-  showing the family group chat. Messages show up in the phone as the dialogue lines come in:
+  Scene 5: Violet alone on the couch at night (the living room art behind), and her phone up close in the middle,
+  showing the family group chat (use "layout": "phone" in the scene JSON so the phone IS the conversation). Messages show up in the phone as the dialogue lines come in:
   the family's messages get a "..." typing bubble first, and Violet's are typed out in the text box
   before they send. The chat stays on the phone when the next scene (05a / 05b) continues it.
 
@@ -17,34 +18,13 @@ import './GroupChat.css';
 
   Extra things a dialogue line can have (in the scene JSON), only used by the phone:
     "time": "3 months ago"     a little date label above the message
-    "history": true            an old message she's scrolling past (no typing animation)
+    "history": true            an old message that's already in the chat when the scene starts
     "deleted": "My blobfriend–"  she types this first, deletes it, then sends the real text
     "note": "Seen"             small grey text under the message
-    "aloud": true              said out loud, not a text (not shown in the phone)
+    "aloud": true              said out loud, not a text (shown as a caption next to Violet instead)
 */
 
 const ME = 'purple';
-const TYPE_SPEED = 24, DRAFT_SPEED = 16, DELETE_SPEED = 30;   // letters per second
-
-// what's in the text box `e` seconds after she starts typing line `l`
-function draft(l, e) {
-  if (e < 0) return '';
-  if (l.deleted) {
-    const d = l.deleted;
-    const t1 = d.length / DRAFT_SPEED;
-    if (e < t1) return d.slice(0, Math.floor(e * DRAFT_SPEED));
-    e -= t1;
-    if (e < 0.6) return d;                      // stares at it...
-    e -= 0.6;
-    const t2 = d.length / DELETE_SPEED;
-    if (e < t2) return d.slice(0, d.length - Math.floor(e * DELETE_SPEED));
-    e -= t2;
-    if (e < 0.35) return '';
-    e -= 0.35;
-  }
-  return l.text.slice(0, Math.floor(e * TYPE_SPEED));
-}
-
 export default function GroupChat({ mood = 'chat', caption, line = 0, lines = [] }) {
   // keep messages from the previous scene(s) on the phone
   const [archive, setArchive] = useState([]);
@@ -73,22 +53,27 @@ export default function GroupChat({ mood = 'chat', caption, line = 0, lines = []
   }, []);
 
   const e = (performance.now() - changedAt.current) / 1000;
-  const messages = [...archive, ...lines.slice(0, line)].filter(m => !m.aloud);
+  // old texts ("history") are already on the phone from the start; the rest show up as the lines come in
+  const messages = [...archive, ...lines.filter(m => m.history), ...lines.slice(0, line).filter(m => !m.history)].filter(m => !m.aloud);
   const next = lines[line];
   const upcoming = next && !next.aloud && !next.history ? next : null;
-  const typing = upcoming && upcoming.speaker === ME ? draft(upcoming, e - 0.35) : '';
+  const typing = upcoming && upcoming.speaker === ME ? draft(upcoming, e - START) : '';
   const dots = upcoming && upcoming.speaker !== ME && e > 0.45 ? upcoming.speaker : null;
   const shaking = mood === 'chat_shaking' && line >= lines.length && e > 1.0;
 
   const members = Object.values(speakerById).filter(s => s.id !== 'orange');
   const name = id => speakerById[id]?.name ?? id;
+  const lastSaid = lines.slice(0, line).filter(m => !m.history).pop();
+  const said = lastSaid?.aloud ? lastSaid : null;                  // something Violet says out loud (not a text)
   const color = id => speakerById[id]?.color ?? '#ccc';
 
   return (
     <div className="gc">
       <LivingRoom mood="alone" caption={caption} line={line} shaking={shaking} />
 
-      <div className={`gc-phone${shaking ? ' is-shaking' : ''}`}>
+      {said && <p className="gc-said" key={said.text}>{said.text}</p>}
+
+      <div className={`gc-phone${shaking ? ' is-shaking' : ''}${caption ? ' after-card' : ''}`}>
         <div className="gc-screen">
           <header className="gc-head">
             <span className="gc-back">‹</span>

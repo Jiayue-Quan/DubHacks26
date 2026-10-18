@@ -5,7 +5,7 @@ export type DialogueLine = {
   text: string;
   pause?: number;     // optional: extra seconds to wait before this line shows up
   time?: string;      // optional: a small label like "3 months ago" (for texts)
-  history?: boolean;  // optional (phone scenes): an old text she's scrolling past
+  history?: boolean;  // optional (phone scenes): an old text that's already in the chat when the scene starts
   deleted?: string;   // optional (phone scenes): typed first, then deleted, before the real text is sent
   note?: string;      // optional (phone scenes): small grey text under the message, like "Seen"
   aloud?: boolean;    // optional (phone scenes): said out loud, not a text
@@ -33,6 +33,7 @@ export type Scene = {
   art?: string;   // animated scene art (e.g. "living_room"); shown instead of the background image
   mood?: string;  // optional: how the blobs act in that art (e.g. "tense", "hurt", "apology", "calm")
   timeSkip?: string;  // optional: a card like "a few weeks later" shown when the scene starts
+  layout?: "phone" | "full";  // optional: "phone" = the phone on screen is the conversation; "full" = just the art, full screen
   wait?: number;      // optional: seconds before the first line shows (to let something happen first)
   dialogue: DialogueLine[];
   choices: Choice[];

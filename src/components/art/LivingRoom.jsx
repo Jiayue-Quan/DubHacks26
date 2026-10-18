@@ -48,7 +48,7 @@ const CAM = {
   couch: { x: 1170, y: 540, z: 1.32 },
   room:  { x: 1040, y: 590, z: 1.12 },       // when violet is standing, show more of the room
   table: { x: 1172, y: 738, z: 2.7 },        // close-up on the coffee table
-  alone: { x: 1250, y: 560, z: 1.45 },       // violet on the left of the frame, mango's empty spot beside her
+  alone: { x: 1330, y: 530, z: 1.8 },       // violet on the left of the frame, mango's empty spot beside her
 };
 const CAPTION_TIME = 2.6;                    // how long the time-skip card stays up
 

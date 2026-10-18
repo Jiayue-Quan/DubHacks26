@@ -1,0 +1,10 @@
+{
+  "id": "end_credits",
+  "background": [
+    "/images/kitchen.svg"
+  ],
+  "art": "credits",
+  "layout": "full",
+  "dialogue": [],
+  "choices": []
+}

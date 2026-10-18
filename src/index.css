@@ -208,3 +208,29 @@ body {
   color: #a79cb5;
   text-transform: lowercase;
 } 
+
+/* phone scenes ("layout": "phone"): the animation fills the screen, choices show up under it at the end */
+.game-shell.is-phone {
+  grid-template-rows: minmax(0, 1fr) auto;
+}
+
+.game-shell.is-phone .art-panel {
+  cursor: pointer;
+}
+
+.game-shell.is-phone .play-panel {
+  padding: 16px 20px 20px;
+}
+
+.game-shell.is-phone .play-panel:empty {
+  display: none;
+}
+/* full-screen scenes ("layout": "full"), like the end credits */
+   
+.game-shell.is-full {
+  grid-template-rows: 1fr;
+  }
+.game-shell.is-full .play-panel,
+.game-shell.is-full .scene-badge {
+  display: none;
+  }

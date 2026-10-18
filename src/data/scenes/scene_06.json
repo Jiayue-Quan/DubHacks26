@@ -1,0 +1,81 @@
+{
+  "id": "scene_06",
+  "title": "Reflection",
+  "sceneNumber": 6,
+  "background": [
+    "/images/kitchen.svg"
+  ],
+  "art": "mirror",
+  "mood": "mirror",
+  "wait": 1.5,
+  "dialogue": [
+    {
+      "speaker": "purple",
+      "text": "You know I love you."
+    },
+    {
+      "speaker": "purple",
+      "text": "I always will."
+    },
+    {
+      "speaker": "purple",
+      "text": "But do I love myself?",
+      "pause": 0.8
+    },
+    {
+      "speaker": "purple",
+      "text": "I thought you were the most special person I ever met. Someone who could love me and understand me in a way that no one else could.",
+      "pause": 1.0
+    },
+    {
+      "speaker": "purple",
+      "text": "You promised to always protect me. That you would never let anyone hurt me.",
+      "pause": 1.2
+    },
+    {
+      "speaker": "purple",
+      "text": "You noticed everything about me, it made me feel so seen.",
+      "pause": 1.2
+    },
+    {
+      "speaker": "purple",
+      "text": "Even now, you're the only one who can make it stop hurting.",
+      "pause": 1.2
+    },
+    {
+      "speaker": "purple",
+      "text": "Because you're the only one who can make me hurt so bad, the only one who can break my heart like this.",
+      "pause": 1.2
+    }
+  ],
+  "choices": [
+    {
+      "text": "Continue",
+      "next": "end_credits"
+    }
+  ],
+  "glossary": {
+    "label": "What is the trauma bond & neurochemical addiction?",
+    "body": "Alternating cycles of high-intensity fear and violence followed by overwhelming affection release a rollercoaster of stress hormones and neurochemicals (oxytocin and dopamine), creating a powerful psychological addiction that makes leaving feel like severe physical withdrawal and keeps victims attached to the very person causing their pain.",
+    "autoOpen": true,
+    "delay": 3,
+    "steps": [
+      {
+        "letter": "♡",
+        "word": "The highs",
+        "quote": "You promised to always protect me."
+      },
+      {
+        "letter": "⚡",
+        "word": "The lows",
+        "quote": "…the only one who can make me hurt so bad."
+      },
+      {
+        "letter": "↺",
+        "word": "Relief from the same person",
+        "quote": "You're the only one who can make it stop hurting."
+      }
+    ],
+    "note": "The sweet memories are real. That's exactly what makes it so hard to leave."
+  }
+}

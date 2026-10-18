@@ -7,6 +7,7 @@
   ],
   "art": "group_chat",
   "mood": "chat_shaking",
+  "layout": "phone",
   "timeSkip": "that night",
   "dialogue": [
     {
@@ -41,8 +42,7 @@
       "speaker": "purple",
       "text": "are you guys awake?",
       "time": "today",
-      "deleted": "hey… I know it's been a while but",
-      "pause": 4
+      "deleted": "hey… I know it's been a while but"
     },
     {
       "speaker": "parent",
@@ -62,8 +62,7 @@
     },
     {
       "speaker": "purple",
-      "text": "I've just been so busy and exhausted with everything…",
-      "pause": 0.6
+      "text": "I've just been so busy and exhausted with everything…"
     },
     {
       "speaker": "parent",
@@ -80,8 +79,7 @@
     {
       "speaker": "purple",
       "text": "Can I stay at your place for a little while?",
-      "deleted": "My blobfriend–",
-      "pause": 3.4
+      "deleted": "My blobfriend–"
     },
     {
       "speaker": "parent",

@@ -7,12 +7,12 @@
   ],
   "art": "group_chat",
   "mood": "chat",
+  "layout": "phone",
   "dialogue": [
     {
       "speaker": "purple",
       "text": "nvm.",
-      "deleted": "They pushed me into the",
-      "pause": 3.6
+      "deleted": "They pushed me into the"
     },
     {
       "speaker": "purple",

@@ -6,6 +6,7 @@ import { DialogueList } from "./DialogueList";
 import { GlossaryButton } from "./GlossaryButton";
 import { SceneBadge } from "./SceneBadge";
 import SceneArt from "./art/SceneArt";
+import { typingTime, START } from "./art/typing";
 
 const TIME_SKIP_WAIT = 2.9;   // seconds to wait for the "a few weeks later" card before the first line
 
@@ -27,6 +28,8 @@ export function SceneView({
   const [progress, setProgress] = useState({ id: scene.id, shown: 0 });
   const shown = progress.id === scene.id ? progress.shown : 0;
   const done = shown >= scene.dialogue.length;
+  const phone = scene.layout === "phone";   // the phone on screen is the conversation (no dialogue list)
+  const full = scene.layout === "full";     // just the art, full screen (end credits)
   const showNext = () =>
     setProgress((p) => ({ id: scene.id, shown: (p.id === scene.id ? p.shown : 0) + 1 }));
 
@@ -40,22 +43,28 @@ export function SceneView({
   // lines come in one at a time
   useEffect(() => {
     if (done) return;
-    const wait = shown === 0
-      ? (scene.timeSkip ? TIME_SKIP_WAIT : scene.wait ?? 0.4) + (scene.dialogue[0].pause ?? 0)
-      : readingTime(scene.dialogue[shown - 1].text) + (scene.dialogue[shown].pause ?? 0);
+    const next = scene.dialogue[shown];
+    // phone scenes: wait until Violet has finished typing her message before it sends
+    const typed = phone && next.speaker === "purple" && !next.history && !next.aloud
+      ? START + typingTime(next) + 0.3 : 0;
+    const base = shown === 0
+      ? (scene.timeSkip ? TIME_SKIP_WAIT : scene.wait ?? 0.4)
+      : readingTime(scene.dialogue[shown - 1].text);
+    // phone scenes: old texts are already on the phone, so skip past them right away
+    const wait = phone && next.history ? 0.05 : Math.max(base, typed) + (next.pause ?? 0);
     const timer = setTimeout(showNext, wait * 1000);
     return () => clearTimeout(timer);
   }, [scene.id, shown, done]);
 
   return (
-    <main className="game-shell">
-      <section className="art-panel">
+    <main className={`game-shell${phone ? " is-phone" : ""}${full ? " is-full" : ""}`}>
+      <section className="art-panel" onClick={phone && !done ? showNext : undefined}>
         <SceneBadge scene={scene} />
         {scene.art ? <SceneArt name={scene.art} mood={scene.mood} caption={scene.timeSkip} line={shown} lines={scene.dialogue} /> : <Background images={backgrounds} />}
       </section>
       <section className="play-panel" ref={panel}>
         {/* click the dialogue to skip ahead to the next line */}
-        <DialogueList lines={scene.dialogue.slice(0, shown)} onClick={done ? undefined : showNext} />
+        {!phone && <DialogueList lines={scene.dialogue.slice(0, shown)} onClick={done ? undefined : showNext} />}
         {done && <ChoiceList choices={scene.choices} onChoose={onChoose} />}
         <GlossaryButton glossary={scene.glossary} ready={done} />
       </section>
