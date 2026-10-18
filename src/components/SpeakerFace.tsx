@@ -7,6 +7,7 @@ export function SpeakerFace({ speaker, size = 44 }: { speaker?: Speaker; size?: 
   return (
     <svg
       className="speaker-face"
+      style={{ flexShrink: 0 }}
       width={size}
       height={size}
       viewBox="0 0 64 64"
