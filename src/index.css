@@ -234,3 +234,23 @@ body {
 .game-shell.is-full .scene-badge {
   display: none;
   }
+
+  /* scenes with animated art: the art fills the screen and the dialogue is speech bubbles on it */
+.game-shell.is-stage {
+  grid-template-rows: 1fr;
+}
+
+.game-shell.is-stage .art-panel {
+  cursor: pointer;
+}
+
+.game-shell.is-stage .play-panel {
+  display: none;
+}
+
+.stage-glossary {
+  position: absolute;
+  z-index: 4;
+  right: 18px;
+  bottom: 18px;
+}

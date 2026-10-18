@@ -1,0 +1,52 @@
+/* speech bubbles over the scene art */
+.speech-layer { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+
+.speech-group {
+  position: absolute; left: 0; top: 0; width: max-content; max-width: min(380px, 78%);
+  display: flex; flex-direction: column; gap: 8px; opacity: 0;
+  filter: drop-shadow(0 6px 16px rgba(30, 20, 40, .25));
+}
+/* little tail pointing down at the speaker */
+.speech-group::after {
+  content: ''; position: absolute; left: var(--tail, 50%); bottom: -11px; width: 22px; height: 14px;
+  translate: -50% 0; background: #fffaf3; clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+.speech-group.is-floating::after { display: none; }
+/* two people talking: each bubble gets about half the screen */
+.speech-layer.has-two .speech-group { max-width: min(380px, 47%); }
+.speech-group:has(.speech-choices)::after { background: #f1eaf8; }
+
+.speech-bubble {
+  position: relative; padding: 10px 16px 12px; border-radius: 20px;
+  background: #fffaf3; color: #4c4358; border: 2.5px solid var(--who);
+  pointer-events: auto;
+  animation: speech-pop .28s cubic-bezier(.2, .9, .3, 1.2) both;
+}
+.speech-bubble p { margin: 0; font-weight: 700; font-size: clamp(14px, 1.35vw, 17px); line-height: 1.38; }
+.speech-name {
+  display: inline-block; margin-bottom: 3px; padding: 1px 9px; border-radius: 999px;
+  background: var(--who); color: #fff; font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase;
+}
+.speech-time { margin-left: 8px; font-size: 11px; font-weight: 700; color: #a79cb5; }
+@keyframes speech-pop { from { opacity: 0; transform: translateY(8px) scale(.94); } }
+
+/* the line before (from the other person): smaller and faded */
+.speech-bubble.is-old { opacity: .55; transform: scale(.94); transform-origin: bottom center; animation: none; transition: opacity .3s; }
+.speech-bubble.is-old p { font-size: clamp(12px, 1.15vw, 15px); }
+
+/* inner monologue */
+.speech-bubble.is-thought { border-style: dashed; border-radius: 26px; background: rgba(255, 250, 243, .9); }
+.speech-bubble.is-thought p { font-style: italic; }
+
+/* choices: stacked under the last bubble, by violet */
+.speech-choices { display: flex; flex-direction: column; gap: 7px; pointer-events: auto; }
+.speech-choice {
+  font: inherit; font-weight: 700; font-size: clamp(13px, 1.25vw, 16px); text-align: left; cursor: pointer;
+  padding: 10px 16px; border-radius: 16px; color: #5b4a6e;
+  background: #f1eaf8; border: 2px solid #cdb8e2;
+  animation: speech-pop .3s cubic-bezier(.2, .9, .3, 1.2) both;
+}
+.speech-choice:nth-child(2) { animation-delay: .08s; }
+.speech-choice:nth-child(3) { animation-delay: .16s; }
+.speech-choice::before { content: '› '; color: #a983a0; }
+.speech-choice:hover { background: #e8ddf4; border-color: #b99bd6; transform: translateX(3px); }

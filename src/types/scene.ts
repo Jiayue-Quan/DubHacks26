@@ -9,6 +9,7 @@ export type DialogueLine = {
   deleted?: string;   // optional (phone scenes): typed first, then deleted, before the real text is sent
   note?: string;      // optional (phone scenes): small grey text under the message, like "Seen"
   aloud?: boolean;    // optional (phone scenes): said out loud, not a text
+  thought?: boolean;  // optional: inner monologue (drawn as a thought bubble)
 };
 
 export type Choice = {

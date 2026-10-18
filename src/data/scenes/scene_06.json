@@ -11,41 +11,49 @@
   "dialogue": [
     {
       "speaker": "purple",
-      "text": "You know I love you."
+      "text": "You know I love you.",
+      "thought": true
     },
     {
       "speaker": "purple",
-      "text": "I always will."
+      "text": "I always will.",
+      "thought": true
     },
     {
       "speaker": "purple",
       "text": "But do I love myself?",
-      "pause": 0.8
+      "pause": 0.8,
+      "thought": true
     },
     {
       "speaker": "purple",
       "text": "I thought you were the most special person I ever met. Someone who could love me and understand me in a way that no one else could.",
-      "pause": 1.0
+      "pause": 1.0,
+      "thought": true
     },
     {
       "speaker": "purple",
       "text": "You promised to always protect me. That you would never let anyone hurt me.",
-      "pause": 1.2
+      "pause": 1.2,
+      "thought": true
     },
     {
       "speaker": "purple",
       "text": "You noticed everything about me, it made me feel so seen.",
-      "pause": 1.2
+      "pause": 1.2,
+      "thought": true
     },
     {
       "speaker": "purple",
       "text": "Even now, you're the only one who can make it stop hurting.",
-      "pause": 1.2
+      "pause": 1.2,
+      "thought": true
     },
     {
       "speaker": "purple",
       "text": "Because you're the only one who can make me hurt so bad, the only one who can break my heart like this.",
-      "pause": 1.2
+      "pause": 1.2,
+      "thought": true
     }
   ],
   "choices": [
